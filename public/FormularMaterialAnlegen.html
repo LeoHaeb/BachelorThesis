@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<head>
+<script>
+    var newID = 14;
+    async function wareEinf() {
+        
+        response = await fetch("http://localhost:8080/Material/getAllMaterials").
+        then(response => response.json());
+        
+        console.log(response);
+        alert("Ware erfolgreich in Datenbank aufgenommen. ID := " + newID);
+        
+        var inputs = document.getElementsByName("inputMaterial");
+        for (var singleInput of inputs) {
+            singleInput.value = '';
+        }
+    }
+</script>
+</head>
+
+<html>
+    <body>
+        <h1>
+            Material in Datenbank anlegen
+        </h1>
+        <div style="width: 150px;">
+            <table>
+				<tr>
+					<td>
+						<label>Hersteller</label><input id="hersteller" cols="20" rows="1" name="inputMaterial"/>
+					</td>
+				</tr>
+                
+                <tr>
+                    <td>
+						<label>Kunststoff Typ</label><input id="recCycles" cols="20" rows="1" name="inputMaterial"/>
+					</td>
+                </tr>
+				<tr>
+					<td>
+						<label>Recycling Zyklen</label><input id="strasse" cols="20" rows="1" name="inputMaterial"/>
+					</td>
+                </tr>
+                <tr>
+					<td>
+						<label>m² Stoff</label><input id="hausnr" cols="20" rows="1" name="inputMaterial"/>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<label>Datum</label><input id="plz" cols="20" rows="1" name="inputMaterial"/>
+					</td>
+                </tr>
+                <tr>
+					<td>
+						<label>Mitarbeiter Warenannahme</label><input id="ort" cols="20" rows="1" name="inputMaterial"/>
+					</td>
+				</tr>
+			</table>
+        </div>
+        <br />
+        <br />
+        <div>
+            <button id="buttonWareEinf" onclick="wareEinf()">
+                einfügen
+            </button>
+        </div>
+    </body>
+</html>
