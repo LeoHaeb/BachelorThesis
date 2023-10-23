@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<head>
+<script>
+    var newID = 14;
+    function registrateCust() {
+        alert("Kunde erfolgreich registriert, ID := " + newID);
+        var inputs = document.getElementsByName("inputCustomer");
+        for (var singleInput of inputs) {
+            singleInput.value = '';
+        }
+    }
+</script>
+</head>
+
+<html>
+    <body>
+        <h1>
+            Kunde registrieren
+        </h1>
+        <div style="width: 150px;">
+            <table>
+				<tr>
+					<td>
+						<label>Kundenname</label><input id="custName" cols="20" rows="1" name="inputCustomer"/>
+					</td>
+				</tr>
+                
+                <tr>
+                    <td>
+						<label>Straße</label><input id="custAdrStreet" cols="20" rows="1" name="inputCustomer"/>
+					</td>
+                </tr>
+				<tr>
+					<td>
+						<label>Hausnummer</label><input id="custAdrNr" cols="20" rows="1" name="inputCustomer"/>
+					</td>
+                </tr>
+                <tr>
+					<td>
+						<label>PLZ</label><input id="custAdrPlz" cols="20" rows="1" name="inputCustomer"/>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<label>Ort</label><input id="custAdrPlace" cols="20" rows="1" name="inputCustomer"/>
+					</td>
+                </tr>
+                <tr>
+					<td>
+						<label>e-mail</label><input id="custMailAdr" cols="20" rows="1" name="inputCustomer"/>
+					</td>
+				</tr>
+                <tr>
+					<td>
+						<label>Passwort</label><input id="custPassword" cols="20" rows="1" name="inputCustomer"/>
+					</td>
+				</tr>
+                <tr>
+					<td>
+						<label>Passwort bestätigen</label><input id="custPasswordConf" cols="20" rows="1" name="inputCustomer"/>
+					</td>
+				</tr>
+			</table>
+        </div>
+        <br />
+        <br />
+        <div>
+            <button id="regCustomer" onclick="registrateCust()">
+                anmelden
+            </button>
+        </div>
+    </body>
+</html>
