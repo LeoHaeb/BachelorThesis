@@ -1,15 +1,6 @@
 <!DOCTYPE html>
 <head>
-<script>
-    var newID = 14;
-    function registrateCust() {
-        alert("Kunde erfolgreich registriert, ID := " + newID);
-        var inputs = document.getElementsByName("inputCustomer");
-        for (var singleInput of inputs) {
-            singleInput.value = '';
-        }
-    }
-</script>
+<script language="JavaScript" type="text/javascript" src="FunctionsCustomerAdd.js"></script>
 </head>
 
 <html>
@@ -20,52 +11,51 @@
         <div style="width: 150px;">
             <table>
 				<tr>
-					<td>
-						<label>Kundenname</label><input id="custName" cols="20" rows="1" name="inputCustomer"/>
-					</td>
+					<td><label>Kundenname</label></td>
+					<td><input id="custName" cols="20" rows="1" name="inputCustomer"/></td>
 				</tr>
                 
                 <tr>
-                    <td>
-						<label>Straße</label><input id="custAdrStreet" cols="20" rows="1" name="inputCustomer"/>
-					</td>
+                    <td><label>Straße</label></td>
+                    <td><input id="custAdrStreet" cols="20" rows="1" name="inputCustomer"/></td>
                 </tr>
 				<tr>
-					<td>
-						<label>Hausnummer</label><input id="custAdrNr" cols="20" rows="1" name="inputCustomer"/>
-					</td>
+					<td><label>Hausnummer</label></td>
+					<td><input id="custAdrNr" cols="20" rows="1" name="inputCustomer"/></td>
                 </tr>
                 <tr>
-					<td>
-						<label>PLZ</label><input id="custAdrPlz" cols="20" rows="1" name="inputCustomer"/>
-					</td>
+					<td><label>PLZ</label></td>
+					<td><input id="custAdrPlz" cols="20" rows="1" name="inputCustomer"/></td>
 				</tr>
 				<tr>
-					<td>
-						<label>Ort</label><input id="custAdrPlace" cols="20" rows="1" name="inputCustomer"/>
-					</td>
+					<td><label>Ort</label></td>
+					<td><input id="custAdrPlace" cols="20" rows="1" name="inputCustomer"/></td>
                 </tr>
                 <tr>
-					<td>
-						<label>e-mail</label><input id="custMailAdr" cols="20" rows="1" name="inputCustomer"/>
-					</td>
+					<td><label>e-mail</label></td>
+					<td><input id="custMailAdr" cols="20" rows="1" name="inputCustomer"/></td>
 				</tr>
                 <tr>
-					<td>
-						<label>Passwort</label><input id="custPassword" cols="20" rows="1" name="inputCustomer"/>
-					</td>
+					<td><label>Passwort</label></td>
+					<td><input id="custPassword" cols="20" rows="1" name="inputCustomer"/></td>
 				</tr>
                 <tr>
-					<td>
-						<label>Passwort bestätigen</label><input id="custPasswordConf" cols="20" rows="1" name="inputCustomer"/>
-					</td>
+					<td><label>Passwort bestätigen</label></td>
+					<td><input id="custPasswordConf" cols="20" rows="1" name="inputCustomer"/></td>
+				</tr>
+                <tr>
+<!--                     <form action="/profile" method="post" enctype="multipart/form-data">
+                    <input type="file" name="avatar" />
+                    </form> -->
+				    <td><label>Bild für Personalisierung</label></td>
+					<td><input id="persImage" name="inputCustomer" type="file"/></td>
 				</tr>
 			</table>
         </div>
         <br />
         <br />
         <div>
-            <button id="regCustomer" onclick="registrateCust()">
+            <button id="regCustomer" onclick="registerCustomer()">
                 anmelden
             </button>
         </div>

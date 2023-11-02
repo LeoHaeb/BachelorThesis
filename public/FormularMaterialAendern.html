@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<head>
+<script language="JavaScript" type="text/javascript" src="FunctionsMaterialUpdate.js"></script>
+<link rel="stylesheet" href="FormularMaterialAendern.css">
+</head>
+<html>
+    <body>
+        <h1>
+            Material Datenbank ändern
+        </h1>
+        <div style="width: 200px; float: left;">
+            <table>
+				<tr>
+					<td>
+						<label>MatNr</label><input id="matNr" cols="20" rows="1" name="inputMaterial"/>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<label>Hersteller</label><input id="manufacturer" cols="20" rows="1" name="inputMaterial"/>
+					</td>
+				</tr>
+                <tr>
+                    <td>
+						<label>Kunststoff Typ</label><input id="type" cols="20" rows="1"  name="inputMaterial"/>
+					</td>
+                </tr>
+				<tr>
+					<td>
+						<label>Recycling Zyklen</label><input id="recCycles" cols="20" rows="1" name="inputMaterial"/>
+					</td>
+                </tr>
+                <tr>
+					<td>
+						<label>m² Stoff</label><input id="size" cols="20" rows="1" name="inputMaterial"/>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<label>Datum</label><input id="date" cols="20" rows="1" name="inputMaterial"/>
+					</td>
+                </tr>
+                <tr>
+					<td>
+						<label>Mitarbeiter Warenannahme</label><input id="employee" cols="20" rows="1" name="inputMaterial"/>
+					</td>
+				</tr>
+			</table>
+			<button id="buttonWareEinf" onclick="changeMat()">
+                aendern
+            </button>
+        </div>
+		<div>
+			Alle Materialien aus Datenbank:
+			<div id="container" ></div>
+		</div>
+        <br />
+        <br />
+        <div>
+
+        </div>
+    </body>
+</html>

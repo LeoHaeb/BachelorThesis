@@ -1,19 +1,34 @@
 class MatDatabase{
-    constructor (pool) {
-        this.db = pool;
+    constructor(db) {
+        this.pool = db.pool;
     }
+     
 
+    //sql statement to get material with specific matNr from db_material
     async getMatById(id) {
         const query = {
-            //text: 'select * from DB_Material where matnr = $1',
-            text: 'insert into db_material(reccycles, synthmattype) values ($1, $2);',
-            //values: [id],
-            values: ['1', 'test']
+            text: 'select * from DB_Material where matnr = $1',
+            values: [id],
         }
         const matData = await this.db.query(query);
+        db.release();
+        
         return matData;
     }
 
+
+    //sql statement to get all materials from db_material
+    async getAllMaterialsDB() {
+        const client = await this.pool.connect();
+        const query = {
+            text: 'select * from DB_Material',
+        }
+        const matData = await client.query(query);
+        client.release();
+        return matData;
+    }
+
+    //sql statement to add new material to db_material
     async addNewMaterialDB(material) {
         const query = {
             text: 'insert into db_material(reccycles, synthmattype, employee, manufacturer, size, date) values ($1, $2, $3, $4, $5, $6) returning matnr;',
@@ -24,7 +39,40 @@ class MatDatabase{
         return res;
     }
 
-    
+    //Function to update material database
+    async updateMaterialDB(newMaterial) {
+        //variable for counting number of arguments to pass to query $1, $2, ...
+        var queryArgNr = 1;
+
+        //array to store relevant attributes to update
+        var arrayUpdateMatAttr = [];
+        //array to store values for relevant attributes to update
+        var arrayUpdateMatAttrVal = [];
+
+        //loop to create arrays, every item is part of a sql query "attr = $x"
+        Object.keys(newMaterial).forEach(matAttr => {
+            if (newMaterial[matAttr] && matAttr != "matNr") {
+                let updateMatAttrString = matAttr + " = $" + String(queryArgNr);
+                arrayUpdateMatAttr.push(updateMatAttrString);
+                arrayUpdateMatAttrVal.push(newMaterial[matAttr]);
+                queryArgNr += 1;
+            } 
+        });
+        
+        //add attribute matNr to array, thos is ID of the database table
+        arrayUpdateMatAttrVal.push(newMaterial["matNr"]);
+
+        //sql update statement
+        const client = await this.pool.connect();
+        const query = {
+            text: 'update db_material set ' + arrayUpdateMatAttr.toString() + ' where matNr = $' + String(queryArgNr),
+            values: arrayUpdateMatAttrVal
+        }
+        const res = await client.query(query);
+        client.release();
+        console.log("res: " + JSON.stringify(res.rows));
+        return res;
+    }
 }
 
 module.exports = MatDatabase;

@@ -20,7 +20,8 @@ console.log('Server started at http://localhost: ' + port);
 app.use('/material/', matRouter);
 console.log(path.join(__dirname, 'public'));
 app.use('/material/', express.static(path.join(__dirname, "public")));
+app.use('/material/changeMaterial', express.static(path.join(__dirname, "public")));
 
 //Routing für Anfragen an Kunde einbinden
-app.use('/kunden/', customerRouter)
-app.use('/kunden/', express.static(path.join(__dirname, "public")));
+app.use('/customer/', customerRouter)
+app.use('/customer/', express.static(path.join(__dirname, "public")));
