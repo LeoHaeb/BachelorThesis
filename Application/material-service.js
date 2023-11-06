@@ -1,3 +1,5 @@
+const Material = require('../Entities/Material');
+
 class MaterialService {
     //constructor for service-object
     //database is attribute of this object
@@ -6,10 +8,15 @@ class MaterialService {
     }
 
     //method to get material from database for specific matNr = id
-    async getMaterialInfo(id) {
+    async getMaterialwithID(id) {
         try {
             const material = await this.matDatabase.getMatById(id);
-            return material;
+            const materialRow = material.rows[0];
+
+            //constructor(matNr = null, recCycles=null, synthMatType=null, manufacturer=null, size=null, date=null, employee=null)
+            materialReturnObj = new Material(materialRow.matnr, materialRow.reccycles, materialRow.synthmattype, materialRow.employee, materialRow.manufacturer, materialRow.size, materialRow.date);
+
+            return materialReturnObj;
         }
         catch(ex) {
             console.log("No Material found with ID = " + id);

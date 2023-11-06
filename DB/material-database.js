@@ -6,13 +6,13 @@ class MatDatabase{
 
     //sql statement to get material with specific matNr from db_material
     async getMatById(id) {
+        const client = await this.pool.connect();
         const query = {
             text: 'select * from DB_Material where matnr = $1',
             values: [id],
         }
-        const matData = await this.db.query(query);
-        db.release();
-        
+        const matData = await client.query(query);
+        client.release();
         return matData;
     }
 
@@ -30,11 +30,13 @@ class MatDatabase{
 
     //sql statement to add new material to db_material
     async addNewMaterialDB(material) {
+        const client = await this.pool.connect();
         const query = {
             text: 'insert into db_material(reccycles, synthmattype, employee, manufacturer, size, date) values ($1, $2, $3, $4, $5, $6) returning matnr;',
             values: [material.recCycles, material.synthMatType, material.employee, material.manufacturer, material.size, material.date]
         }
-        const res = await this.db.query(query);
+        const res = await client.query(query);
+        client.release();
         console.log("res: " + JSON.stringify(res.rows));
         return res;
     }

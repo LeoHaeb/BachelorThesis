@@ -1,5 +1,3 @@
-const CustomerDatabase = require("../Gateways/customer-database");
-
 class CustomerService {
 
     //constructor for Service Object 
@@ -9,13 +7,13 @@ class CustomerService {
     }
 
     //method to get customers from database for specific customerNr = id
-    async getCustomerInfo(id) {
+    async getCustomerWithID(id) {
         try {
-            const material = await this.matDatabase.getCustomerById(id);
-            return material;
+            const customer = await this.customerDatabase.getCustomerById(id);
+            return customer;
         }
         catch(ex) {
-            console.log("No Material found with ID = " + id);
+            console.log("No customer found with ID = " + id);
         }
     }
 
@@ -50,4 +48,4 @@ class CustomerService {
     }
 }
 
-module.exports = CustomerDatabase;
+module.exports = CustomerService;

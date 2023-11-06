@@ -20,7 +20,7 @@ matRouter.get('/getMaterial/:id', async function(req, res) {
     const materialService = new MaterialService(matDatabase);
 
     //read out data from database for id
-    const material = await materialService.getMaterialInfo(id);
+    const material = await materialService.getMaterialwithID(id);
     res.send(material);
     console.log(material.rows);
 });
@@ -48,8 +48,10 @@ matRouter.get('/getAllMaterial/', async function(req, res) {
 //POST-request for adding new material to database
 matRouter.post('/addNewMaterial/', async function(req, res) {
 
-    //database object
-    const matDatabase = new MatDatabase(dbConnection );
+    //Database-Connection Object
+    const dbConnection = new DBConnection();
+    //database-object 
+    const matDatabase = new MatDatabase(dbConnection);
     //material-service-object
     const materialService = new MaterialService(matDatabase);
 

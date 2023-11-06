@@ -25,15 +25,15 @@ class CustomerDatabase {
     }
 
     //sql statement to add new customer to db_customer
-    async addNewCustomerDB(customer) {
+    async  addNewCustomerDB(customer) {
         const client = await this.pool.connect();
         const query = {
             //text: 'insert into db_customer(kd_name, personalng_obj, street, place, streetnr, email, passwd) values ($1, $2, $3, $4, $5, $6, crypt($7, gen_salt(\'md5\'))) returning kd_nr;',
-            text: 'insert into db_customer(cust_name, personal_obj, street, place, streetnr, email, passwd) values ($1, $2, $3, $4, $5, $6, $7) returning kd_nr;',
+            text: 'insert into db_customer(cust_name, personal_obj, street, place, streetnr, email, passwd, postcode) values ($1, $2, $3, $4, $5, $6, crypt($7, gen_salt(\'md5\')), $8) returning cust_nr;',
             //text: 'insert into db_customer (kd_name, personalng_obj, street, place, streetNr, email, passwd) values (\'Leo\', \'{"path": "www.bsp.de"}\', \'Hauptstr\', \'Albstadt\', \'4/1\', \'leo.haeberle@web.de\', \'1234\') returning kd_nr;',
             //text: 'select * from db_customer;',
             //text: 'insert into db_customer(reccycles, synthmattype, employee, manufacturer, size, date) values ($1, $2, $3, $4, $5, $6) returning matnr;',
-            values: [customer.customerName, JSON.stringify(customer.customerPersonalization), customer.customerAdrStreet, customer.customerAdrPlace, customer.customerAdrNr, customer.customerEmail, customer.customerPswd]
+            values: [customer.customerName, JSON.stringify(customer.customerPersonalization), customer.customerAdrStreet, customer.customerAdrPlace, customer.customerAdrNr, customer.customerEmail, customer.customerPswd, customer.customerPostCode]
         }
         const res = client.query(query);
         client.release();
