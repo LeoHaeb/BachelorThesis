@@ -4,24 +4,29 @@ const path = require('path');
 const postGreSQL = require('pg'); 
 const matRouter = require('./Routing/routing-material');
 const customerRouter = require('./Routing/routing-customers');
+const orderRouter = require('./Routing/routing-order');
 const bodyParser = require('body-parser')
 
-//Express framework einbinden
+//use Express framework 
 const app = express();
 
 app.use(bodyParser.json()); 
 
-//Server einrochten
+//create Server
 const port = process.env.PORT || 8080;
 app.listen(port);
 console.log('Server started at http://localhost: ' + port);
 
-//Routing für Anfragen an Material einbinden
+//Routing for requests to material
 app.use('/material/', matRouter);
 console.log(path.join(__dirname, 'public'));
 app.use('/material/', express.static(path.join(__dirname, "public")));
 app.use('/material/changeMaterial', express.static(path.join(__dirname, "public")));
 
-//Routing für Anfragen an Kunde einbinden
-app.use('/customer/', customerRouter)
+//Routing für request to customer
+app.use('/customer/', customerRouter);
 app.use('/customer/', express.static(path.join(__dirname, "public")));
+
+//Routing for requests to orders
+app.use('/order/', orderRouter);
+

@@ -1,5 +1,5 @@
 const express = require('express');
-const CustomerService = require('../Application/customer-service');
+const CustomerController = require('../Controllers/CustomerController');
 const CustomerDatabase = require('../DB/customer-database');
 const Customer = require('../Entities/Customer');
 //integrate module for connection to database
@@ -30,6 +30,29 @@ const upload = multer({
 var customerRouter = express.Router();
 
 
+//GET-request for getting customer
+customerRouter.get('/getCustomerByID/:id', async function(req, res) {
+    const id = req.params.id;
+
+    try {
+        //Database-Connection Object
+        const dbConnection = new DBConnection();
+        //database-object 
+        const customerDatabase = new CustomerDatabase(dbConnection);
+        //create material controller object with dependency injection of database
+        const customerController = new CustomerController(customerDatabase);
+
+        console.log("http-request to get customer with id = " +req.params.id  + " from DB\n");
+
+        const customer = await customerController.getCustomerWithID(id);
+        console.log("Customer with ID = " + id + ": " + customer);
+        res.send(customer);
+    } catch(error) {
+        res.status(404).json({error: error.message})
+    }
+});
+
+
 //POST-request for uploading an image
 //response is the filename under which file is saved on backend + directory under which file is saved on backend
 //resonse is sent as JSON
@@ -56,20 +79,15 @@ customerRouter.post('/addNewCustomer/', async function(req, res) {
 
     const dbConnection = new DBConnection();
     //database object
-    const customerDatabase = new CustomerDatabase(dbConnection );
-    //customer-service-object
-    const customerService = new CustomerService(customerDatabase);
+    const customerDatabase = new CustomerDatabase(dbConnection);
+    //create customer controller object 
+    const customerController = new CustomerController(customerDatabase);
 
     console.log("add new customer to DB\n");
-    console.log(req.body);
-
-    const reqBody = req.body;
 
     try {
-        //create new customer-object
-        const customer = new Customer(null, reqBody.customerName, reqBody.custAdrStreet, reqBody.custAdrPlace, reqBody.custPostCode, reqBody.custAdrNr, reqBody.persImage, reqBody.custMailAdr, reqBody.custPassword);
         //add new costumer to database
-        const addedCustomer = await customerService.addNewCustomer(customer);
+        const addedCustomer = await customerController.addNewCUstomer(customer);
         console.log("added Customer: " + JSON.stringify(addedCustomer.rows));
         res.json(addedCustomer.rows[0].cust_nr);
     } catch(error) {

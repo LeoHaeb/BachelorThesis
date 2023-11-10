@@ -9,6 +9,30 @@ class Material {
         this.size = size;
         this.date = date;
         this.employee = employee;
+
+        setMatNr: (matNr) => this.matNr = matNr;
+        setRecCycles: (recCycles) => this.recCycles = recCycles;
+        setSynthMatType: (synthMatType) => this.synthMatType = synthMatType;
+        setManufacturer: (manufacturer) => this.manufacturer = manufacturer;
+        setSize: (size) => this.size = size;
+        setDate: (date) => this.date = date;
+        setEmployee: (employee) => this.employee = employee;
+    }
+
+    setMatNr(id) {
+        this.matNr = id;
+    }
+
+    stringifyMaterial(){
+        const returnString = "Material: " + "matNr: " + this.matNr.toString() + ", "
+        + "recCycles: " + this.recCycles.toString() + ", "
+        + "synthMatType" + this.synthMatType.toString() + ", "
+        + "manufacturer" + this.manufacturer.toString() + ", "
+        + "size" + this.size.toString() + ", "
+        + "date" + this.date.toString() + ", "
+        + "employee" + this.employee.toString();
+
+        return returnString;
     }
 }
 

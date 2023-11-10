@@ -5,7 +5,7 @@ class MatDatabase{
      
 
     //sql statement to get material with specific matNr from db_material
-    async getMatById(id) {
+    async getMaterialwithID(id) {
         const client = await this.pool.connect();
         const query = {
             text: 'select * from DB_Material where matnr = $1',
@@ -18,18 +18,19 @@ class MatDatabase{
 
 
     //sql statement to get all materials from db_material
-    async getAllMaterialsDB() {
+    async getAllMaterialsEntities() {
         const client = await this.pool.connect();
         const query = {
             text: 'select * from DB_Material',
         }
         const matData = await client.query(query);
         client.release();
+        console.log("Material-database return for getAllMaterialsEntities : " + JSON.stringify(matData.rows));
         return matData;
     }
 
     //sql statement to add new material to db_material
-    async addNewMaterialDB(material) {
+    async addNewMaterialEntity(material) {
         const client = await this.pool.connect();
         const query = {
             text: 'insert into db_material(reccycles, synthmattype, employee, manufacturer, size, date) values ($1, $2, $3, $4, $5, $6) returning matnr;',
@@ -37,12 +38,12 @@ class MatDatabase{
         }
         const res = await client.query(query);
         client.release();
-        console.log("res: " + JSON.stringify(res.rows));
+        console.log("Material-database return for addNewMAterialEntity : " + JSON.stringify(res.rows));
         return res;
     }
 
     //Function to update material database
-    async updateMaterialDB(newMaterial) {
+    async updateMaterialEntity(newMaterial) {
         //variable for counting number of arguments to pass to query $1, $2, ...
         var queryArgNr = 1;
 

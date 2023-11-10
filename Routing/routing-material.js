@@ -1,7 +1,6 @@
 const express = require('express');
-const MaterialService = require('../Application/material-service');
-const MatDatabase = require('../Gateways/material-database');
-const Material = require('../Entities/Material');
+const MaterialController = require('../Controllers/MaterialController');
+const MatDatabase = require('../DB/material-database');
 //integrate module for connection to database
 const DBConnection = require('../DataBaseConnection');
 const path = require('path');
@@ -13,30 +12,40 @@ var matRouter = express.Router();
 matRouter.get('/getMaterial/:id', async function(req, res) {
     const id = req.params.id;
 
-    const dbConnection = new DBConnection();
-    //database-Object 
-    const matDatabase = new MatDatabase(dbConnection );
-    //material-service-object
-    const materialService = new MaterialService(matDatabase);
-
-    //read out data from database for id
-    const material = await materialService.getMaterialwithID(id);
-    res.send(material);
-    console.log(material.rows);
-});
-
-//Get all Materials from Material DB
-matRouter.get('/getAllMaterial/', async function(req, res) {
     try {
         //Database-Connection Object
         const dbConnection = new DBConnection();
         //database-object 
         const matDatabase = new MatDatabase(dbConnection);
-        //material-service-object
-        const materialService = new MaterialService(matDatabase);
+        //create material controller object with dependency injection of database
+        const materialController = new MaterialController(matDatabase);
+
+        console.log("http-request to get material with id = " +req.params.id  + " from DB\n");
+
+        const material = await materialController.getMaterialwithID(id);
+        console.log("Material with ID = " + id + ": " + material.rows[0]);
+        res.send(material);
+    } catch(error) {
+        res.status(404).json({error: error.message})
+    }
+});
+
+
+
+//Get all Materials from Material DB
+matRouter.get('/getAllMaterial/', async function(req, res) {
+    try {
+    //Database-Connection Object
+    const dbConnection = new DBConnection();
+    //database-object 
+    const matDatabase = new MatDatabase(dbConnection);
+    //create material controller object with dependency injection of database
+    const materialController = new MaterialController(matDatabase);
+
+    console.log("http-request to get all material entries from DB\n");
 
         //get all database entries from db_material
-        const allMaterials = await materialService.getAllMaterials();
+        const allMaterials = await materialController.getAllMaterials();
         res.send(allMaterials);
         console.log(allMaterials.rows);
     } catch(error) {
@@ -52,21 +61,15 @@ matRouter.post('/addNewMaterial/', async function(req, res) {
     const dbConnection = new DBConnection();
     //database-object 
     const matDatabase = new MatDatabase(dbConnection);
-    //material-service-object
-    const materialService = new MaterialService(matDatabase);
+    //create material controller object with dependency injection of database
+    const materialController = new MaterialController(matDatabase);
 
-    console.log("add new material to DB\n");
-    console.log(req.body);
-
-    const reqBody = req.body;
+    console.log("http-request to add new material to DB\n");
 
     try {
-        //create new material-object
-        const material = new Material(null, parseInt(reqBody.recCycles), reqBody.synthMatType, reqBody.manufacturer, parseInt(reqBody.size), reqBody.date, reqBody.employee);
-        //add new material to database
-        const addedMat = await materialService.addNewMaterial(material);
-        console.log("added Material: " + JSON.stringify(addedMat.rows));
-        res.json(addedMat);
+        const addedMat = await materialController.addNewMaterial(req, res);
+        console.log("added Material: " + JSON.stringify(addedMat));
+        res.json(addedMat.stringifyMaterial());
     } catch(error) {
         res.status(404).json({error: error.message})
     }
@@ -77,21 +80,15 @@ matRouter.post('/updateMaterial/', async function(req, res) {
     
     //Database-Connection Object
     const dbConnection = new DBConnection();
-    //database object
-    const matDatabase = new MatDatabase(dbConnection );
-    //material-service-object
-    const materialService = new MaterialService(matDatabase);
+    //database-object 
+    const matDatabase = new MatDatabase(dbConnection);
+    //create material controller object with dependency injection of database
+    const materialController = new MaterialController(matDatabase);
 
-    console.log("update material in DB\n");
-    console.log(req.body);
-
-    const reqBody = req.body;
+    console.log("http-request to update material in DB\n");
 
     try {
-        //create new material-object with updated data
-        const material = new Material(parseInt(reqBody.matNr), parseInt(reqBody.recCycles), reqBody.synthMatType, reqBody.manufacturer, parseInt(reqBody.size), reqBody.date, reqBody.employee);
-        //update database dbn_material
-        const updateMat = await materialService.updateMaterial(material);
+        const updateMat = await materialController.updateMaterial(req);
         console.log("updated Material: " + JSON.stringify(updateMat.rows));
         res.json(updateMat);
     } catch(error) {
