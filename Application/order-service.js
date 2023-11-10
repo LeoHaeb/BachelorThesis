@@ -9,7 +9,7 @@ class OrderService{
     }
 
     //method to add new object order to db_order
-    async createNewOrder(customerObj, oderDatabase) {
+    async createNewOrder(customerObj, orderDatabase) {
 
         try {
 
@@ -18,10 +18,10 @@ class OrderService{
             
             //add new Order to db
             //get back id for new order
-            const newOrderID =  oderDatabase.creatNewOrderDB(newOrderObject);
+            const newOrderID =  await orderDatabase.createNewOrderEntity(newOrderObject);
 
             //set orderID in new Order Object
-            newOrderObject.setOrderID(newOrderID);
+            newOrderObject.setOrderID(newOrderID.rows[0].order_id);
 
             return newOrderObject;
         } catch(ex) {

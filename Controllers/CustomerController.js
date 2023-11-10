@@ -1,5 +1,4 @@
 const CustomerService = require("../Application/customer-service");
-const Customer = require("../Entities/Customer");
 
 class CustomerCOntroller{
 

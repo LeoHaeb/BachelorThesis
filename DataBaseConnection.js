@@ -10,7 +10,6 @@ class DataBaseConnection {
             dialect: 'postgres',
             port: 5432
         });
-
     }
 }
 

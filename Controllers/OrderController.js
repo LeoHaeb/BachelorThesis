@@ -22,7 +22,7 @@ class OrderController{
         const customer = await customerController.getCustomerWithID(custNr);
 
         //invoke method to add new order
-        const newOrder = orderService.createNewOrder(customer, this.orderDatabase);
+        const newOrder = await orderService.createNewOrder(customer, this.orderDatabase);
 
         console.log("OrderController return for createNewOrder: " + newOrder);
         return newOrder;

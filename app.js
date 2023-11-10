@@ -1,7 +1,6 @@
 //importing modules
 const express = require('express');
 const path = require('path');
-const postGreSQL = require('pg'); 
 const matRouter = require('./Routing/routing-material');
 const customerRouter = require('./Routing/routing-customers');
 const orderRouter = require('./Routing/routing-order');
