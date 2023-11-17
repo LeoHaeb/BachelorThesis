@@ -10,13 +10,13 @@ class Material {
         this.date = date;
         this.employee = employee;
 
-        setMatNr: (matNr) => this.matNr = matNr;
+/*         setMatNr: (matNr) => this.matNr = matNr;
         setRecCycles: (recCycles) => this.recCycles = recCycles;
         setSynthMatType: (synthMatType) => this.synthMatType = synthMatType;
         setManufacturer: (manufacturer) => this.manufacturer = manufacturer;
         setSize: (size) => this.size = size;
         setDate: (date) => this.date = date;
-        setEmployee: (employee) => this.employee = employee;
+        setEmployee: (employee) => this.employee = employee; */
     }
 
     setMatNr(id) {

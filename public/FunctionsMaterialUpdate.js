@@ -3,36 +3,7 @@ document.addEventListener("DOMContentLoaded", init);
 async function init() {
     //get all material from database and save in variable allData
     res = await fetch("http://localhost:8080/Material/getAllMaterial").then(allData => allData.json())
-    allData = res.rows;
-/*     allData1 = [
-        {   
-            'matNr': 1,
-            "recCycles": 13,
-            "synthMatType": "PVC",
-            "manufacturer": "Fischer",
-            "size": 25,
-            "date": "10.09.2023",
-            "employee": "Leo"
-        },
-        {
-            'matNr': 2,
-            "recCycles": 17,
-            "synthMatType": "PVC",
-            "manufacturer": "Heinrichs",
-            "size": 28,
-            "date": "12.12.2022",
-            "employee": "Gustav"
-        } ,
-        {
-            'matNr': 3,
-            "recCycles": 1,
-            "synthMatType": "STP",
-            "manufacturer": "Mueller",
-            "size": 22,
-            "date": "11.11.2222",
-            "employee": "Isabelle"
-        } 
-    ] */
+    let allData = res.rows;
              
          // Get the container element where the table will be inserted
          let container = document.getElementById("container");

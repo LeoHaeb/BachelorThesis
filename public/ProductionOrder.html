@@ -1,107 +1,7 @@
 <!DOCTYPE html>
 <head>
-<script>
-    document.addEventListener("DOMContentLoaded", init);
-
-    async function init() {
-        loadMaterials();
-    }
-
-    var newID = 14;
-
-    const bspMaterialListe = [
-                {
-                    "MatNr": 1,
-                    "Hersteller": "Plastico",
-                    "Kunststofftyp": "PolyUrEthan",
-                    "RecyclingZyklen": 4,
-                    "Menge": 1,
-                    "Datum": "19.09.2023",
-                    "Mitarbeiter": "Leo"
-                },
-                {
-                    "MatNr": 2,
-                    "Hersteller": "Schweller Kunstoffe",
-                    "Kunststofftyp": "PolyEthylen",
-                    "RecyclingZyklen": 8,
-                    "Menge": 3,
-                    "Datum": "11.07.2022",
-                    "Mitarbeiter": "Leo"
-                },
-                {
-                    "MatNr": 3,
-                    "Hersteller": "Continental",
-                    "Kunststofftyp": "Sturodur",
-                    "RecyclingZyklen": 13,
-                    "Menge": 2,
-                    "Datum": "03.01.2023",
-                    "Mitarbeiter": "Leo"
-                }
-            ]
-
-    function produkteAnlegen() {
-        var checkboxes = document.getElementsByName('checkProd');
-        for (var checkbox of checkboxes) {
-            checkbox.checked = false;
-
-        }
-
-        var inputboxes = document.getElementsByName('inputNrProd');
-        for (var inputbox of inputboxes) {
-            inputbox.value = '';
-        }
-    }
-
-    function loadMaterials() {
-        var selList = document.getElementsByName("materials");
-        console.log(selList);
-        for (let index=0; index<selList.length; index++) {
-            console.log("index: " + index);
-            for (i in bspMaterialListe) {
-                var option = document.createElement("option");
-                option.text = bspMaterialListe[i].MatNr + " " + bspMaterialListe[i].Hersteller + " " + bspMaterialListe[i].Kunststofftyp;
-                selList[index].add(option);
-            }
-        }
-    }
-
-    function insertnewProduct() {
-        var tableProd = document.getElementById("tableProducts");
-        var newProdName = document.getElementById("inputNameNewProd");
-        var row = tableProd.insertRow(1);
-        for (let i=0; i<4; i++){
-            var cell = row.insertCell(i);
-            switch(i) {
-                case 0:
-                    var x = document.createElement("input");
-                    x.setAttribute("type", "checkbox");
-                    x.setAttribute("id", "ckeck");
-                    cell.appendChild(x);
-                    break;
-                case 1:
-                    cell.innerHTML = newProdName.value;
-                    break;
-                case 2:
-                    var x = document.createElement("input");
-                    x.setAttribute("type", "text");
-                    cell.appendChild(x);
-                    break;
-                case 3:
-                    var x = document.createElement("select");
-                    x.setAttribute("name", "materials");
-                    cell.appendChild(x);
-                    loadMaterials();
-                    break;
-            }
-        }
-    }
-    
-
-
-
-</script>
+<script language="JavaScript" type="text/javascript" src="FunctionsProductionOrder.js"></script>
 </head>
-
 <html>
     <body>
         <h1>
@@ -116,32 +16,32 @@
                 <tr>
                     <td><input type="checkbox" id="checkGB_L" name="checkProd"></td>
                     <td>GB(L)</td>
-                    <td><input type="text" name="inputNrProd" id=""></td>
+                    <td><input type="text" id="amount_GB_L"></td>
                     <td><select name="materials" id="selMaterials_GB_L"></select></td>
                 </tr>
                 <tr>
                     <td><input type="checkbox" id="checkGB_L" name="checkProd"></td>
                     <td>GB(XL)</td>
-                    <td><input type="text" name="inputNrProd" id=""></td>
+                    <td><input type="text" id="amount_GB_XL"></td>
                     <td><select name="materials" id="selMaterials_GB_XL"></select></td>
                 </tr>
                 <tr>
                     <td><input type="checkbox" id="checkGB_L" name="checkProd"></td>
                     <td>GB(XXL)</td>
-                    <td><input type="text" name="inputNrProd" id=""></td>
+                    <td><input type="text" id="amount_GB_XXL"></td>
                     <td><select name="materials" id="selMaterials_GB_XXL"></select></td>
                 </tr>
                 <tr>
                     <td><input type="checkbox" id="checkGB_L" name="checkProd"></td>
                     <td>Tasche</td>
-                    <td><input type="text" name="inputNrProd" id=""></td>
-                    <td><select name="materials" id="selMaterials_Tasche"></select></td>
+                    <td><input type="text" id="amount_suitcase"></td>
+                    <td><select name="materials" id="selMaterials_suitcase"></select></td>
                 </tr>
             </table>
         </div>
         <br>
         <div>
-            <button onclick="produkteAnlegen()">Einfügen</button>
+            <button onclick="addProducts()">Einfügen</button>
         </div>
         <br>
         <br>

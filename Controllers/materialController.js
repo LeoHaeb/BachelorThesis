@@ -24,7 +24,7 @@ class MaterialController {
     async getAllMaterials() {
 
         //create MaterialService Object
-        const materialService = new MaterialService(this.matDatabase)
+        const materialService = new MaterialService()
 
         //invoke method from Use Case Layer to work with material object, dependency injection with material database
         const allMaterials = await materialService.getAllMaterials(this.matDatabase);
@@ -47,7 +47,7 @@ class MaterialController {
         const employee = reqBody.employee;
 
         //create MaterialService Object
-        const materialService = new MaterialService(this.matDatabase)
+        const materialService = new MaterialService()
 
         //invoke method from Use Use Case Layer to work with material object, dependency injection with material database
         const addedMat = await materialService.addNewMaterial(recCycles, synthMatType, manufacturer, size, date, employee, this.matDatabase);

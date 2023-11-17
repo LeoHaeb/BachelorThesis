@@ -5,7 +5,7 @@ class MatDatabase{
      
 
     //sql statement to get material with specific matNr from db_material
-    async getMaterialwithID(id) {
+    async getMaterialEntitywithID(id) {
         const client = await this.pool.connect();
         const query = {
             text: 'select * from DB_Material where matnr = $1',

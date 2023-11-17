@@ -46,8 +46,8 @@ matRouter.get('/getAllMaterial/', async function(req, res) {
 
         //get all database entries from db_material
         const allMaterials = await materialController.getAllMaterials();
+        console.log("all Materials in Database: \n" + allMaterials);
         res.send(allMaterials);
-        console.log(allMaterials.rows);
     } catch(error) {
         res.status(404).json({error: error.message})
     }

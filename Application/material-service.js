@@ -10,12 +10,12 @@ class MaterialService {
     async getMaterialwithID(id, matDatabase) {
         try {
             //draw all information for custoemr from database
-            const material = await matDatabase.getMatById(id);
+            const material = await matDatabase.getMaterialEntitywithID(id);
             const materialRow = material.rows[0];
 
             //create Material Object with information from database
             //constructor(matNr = null, recCycles=null, synthMatType=null, manufacturer=null, size=null, date=null, employee=null)
-            materialReturnObj = new Material(materialRow.matnr, materialRow.reccycles, materialRow.synthmattype, materialRow.employee, materialRow.manufacturer, materialRow.size, materialRow.date);
+            const materialReturnObj = new Material(materialRow.matnr, materialRow.reccycles, materialRow.synthmattype, materialRow.manufacturer, materialRow.size, materialRow.date, materialRow.employee);
 
             console.log("MaterialService return for getMaterialwithID(id = " + id + "): " + materialReturnObj);
             return materialReturnObj;
@@ -45,7 +45,7 @@ class MaterialService {
         }
     }
 
-    //method to get all materials from material database
+    //method to get all materials from material database as list of Matreial Objects
     async getAllMaterials(matDatabase) {
         try {
             const allMaterials = await matDatabase.getAllMaterialsEntities();

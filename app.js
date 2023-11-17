@@ -4,11 +4,13 @@ const path = require('path');
 const matRouter = require('./Routing/routing-material');
 const customerRouter = require('./Routing/routing-customers');
 const orderRouter = require('./Routing/routing-order');
+const productionRouter = require('./Routing/routing-production.js');
 const bodyParser = require('body-parser')
 
 //use Express framework 
 const app = express();
 
+//use body parser
 app.use(bodyParser.json()); 
 
 //create Server
@@ -28,4 +30,8 @@ app.use('/customer/', express.static(path.join(__dirname, "public")));
 
 //Routing for requests to orders
 app.use('/order/', orderRouter);
+
+//Routing for requests to production
+app.use('/production/', productionRouter);
+app.use('/production/', express.static(path.join(__dirname, "public")));
 
