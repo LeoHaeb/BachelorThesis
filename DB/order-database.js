@@ -3,7 +3,7 @@ class OrderDatabase {
         this.pool = db.pool;
     }
 
-    //create nwe Order Entity in database
+    //create new order entity in database
     async createNewOrderEntity(order) {
         const client = await this.pool.connect();
         const query = {

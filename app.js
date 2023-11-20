@@ -1,10 +1,10 @@
 //importing modules
 const express = require('express');
 const path = require('path');
-const matRouter = require('./Routing/routing-material');
-const customerRouter = require('./Routing/routing-customers');
-const orderRouter = require('./Routing/routing-order');
-const productionRouter = require('./Routing/routing-production.js');
+const matRouter = require('./Routing/Routing-material.js');
+const customerRouter = require('./Routing/Routing-customers.js');
+const orderRouter = require('./Routing/Routing-order.js');
+const productionRouter = require('./Routing/Routing-production.js');
 const bodyParser = require('body-parser')
 
 //use Express framework 

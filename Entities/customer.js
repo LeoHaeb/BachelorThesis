@@ -12,6 +12,10 @@ class Customer {
         this.customerEmail = customerEmail;
         this.customerPswd = customerPswd;
     }
+
+    setCustomerNr(id) {
+        this.customerNr = id;
+    }
 }
 
 module.exports = Customer;

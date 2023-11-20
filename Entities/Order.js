@@ -1,6 +1,6 @@
 //class for orders
 
-const orderRouter = require("../Routing/routing-order");
+const orderRouter = require("../Routing/Routing-order");
 
 //has only one attribute: customerID -> custoemr who has ordered 
 class Order{

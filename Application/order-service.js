@@ -8,9 +8,8 @@ class OrderService{
     constructor(){
     }
 
-    //method to add new object order to db_order
+    //method to add new object order to order db
     async createNewOrder(customerObj, orderDatabase) {
-
         try {
 
             //create order object
@@ -23,11 +22,11 @@ class OrderService{
             //set orderID in new Order Object
             newOrderObject.setOrderID(newOrderID.rows[0].order_id);
 
+            console.log("Orderservice return for createNewOrder: " + newOrderObject);
             return newOrderObject;
         } catch(ex) {
-            console.log("Adding new order failed !\n");
+            console.log("Problem in class Order-service in method addNewMaterial");
         }
-
     }
 }
 

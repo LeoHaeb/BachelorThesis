@@ -1,15 +1,17 @@
 const express = require('express');
 const MaterialController = require('../Controllers/MaterialController');
-const MatDatabase = require('../DB/material-database');
+const MatDatabase = require('../DB/Material-database');
 //integrate module for connection to database
 const DBConnection = require('../DataBaseConnection');
+//integrate path module
 const path = require('path');
  
 //create routing-object from express middleware 
 var matRouter = express.Router();
 
-//get-requests for material
+//get-requests for material with id parameter
 matRouter.get('/getMaterial/:id', async function(req, res) {
+    //get id
     const id = req.params.id;
 
     try {
@@ -22,10 +24,13 @@ matRouter.get('/getMaterial/:id', async function(req, res) {
 
         console.log("http-request to get material with id = " +req.params.id  + " from DB\n");
 
+        //invoke method from next layer to get material with id
         const material = await materialController.getMaterialwithID(id);
         console.log("Material with ID = " + id + ": " + material.rows[0]);
+        //send response
         res.send(material);
     } catch(error) {
+        //catch error by sending error 
         res.status(404).json({error: error.message})
     }
 });
@@ -55,6 +60,7 @@ matRouter.get('/getAllMaterial/', async function(req, res) {
 
 
 //POST-request for adding new material to database
+//response is new material object as string
 matRouter.post('/addNewMaterial/', async function(req, res) {
 
     //Database-Connection Object
@@ -68,8 +74,8 @@ matRouter.post('/addNewMaterial/', async function(req, res) {
 
     try {
         const addedMat = await materialController.addNewMaterial(req, res);
-        console.log("added Material: " + JSON.stringify(addedMat));
-        res.json(addedMat.stringifyMaterial());
+        console.log("added Material: " + addedMat);
+        res.send(addedMat);
     } catch(error) {
         res.status(404).json({error: error.message})
     }

@@ -1,10 +1,11 @@
 const express = require('express');
 const CustomerController = require('../Controllers/CustomerController');
-const CustomerDatabase = require('../DB/customer-database');
-const Customer = require('../Entities/Customer');
+const CustomerDatabase = require('../DB/Customer-database');
+
 //integrate module for connection to database
 const DBConnection = require('../DataBaseConnection');
 const path = require('path');
+
 //integrate multer module for uploading files to backend
 const multer = require('multer');
 
@@ -77,19 +78,20 @@ customerRouter.post('/uploadImage', upload.single('customerImage'), function (re
 //response is sent as JSON
 customerRouter.post('/addNewCustomer/', async function(req, res) {
 
+    //database conncection object
     const dbConnection = new DBConnection();
-    //database object
+    //customer database object
     const customerDatabase = new CustomerDatabase(dbConnection);
     //create customer controller object 
     const customerController = new CustomerController(customerDatabase);
 
-    console.log("add new customer to DB\n");
+    console.log("http-request to add customer to DB\n");
 
     try {
         //add new costumer to database
         const addedCustomer = await customerController.addNewCUstomer(customer);
-        console.log("added Customer: " + JSON.stringify(addedCustomer.rows));
-        res.json(addedCustomer.rows[0].cust_nr);
+        console.log("added Customer: " + JSON.stringify(addedCustomer));
+        res.send(addedCustomer);
     } catch(error) {
         res.status(404).json({error: error.message})
     }

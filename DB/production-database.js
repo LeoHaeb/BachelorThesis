@@ -4,8 +4,11 @@ class ProductionDatabase {
         this.pool = db.pool;
     }
 
+
+    //method to add new product entries to db
     async addNewProductEntity(newProduct, amount) {
 
+        //list for IDs of new products
         const listProductID = [];
 
         const client = await this.pool.connect();
@@ -14,7 +17,7 @@ class ProductionDatabase {
             values: [newProduct.material.matNr, newProduct.productName]
         }
 
-        //add entry for each new Product
+        //add entry for each new Product x amount
         for (let i = 0; i < amount; i++) {
             const res = await client.query(query);
             //add id for new Product to list

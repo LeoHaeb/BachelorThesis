@@ -1,5 +1,5 @@
 const { errors } = require("pg-promise");
-const OrderSpecService = require("../Application/orderSpec-service");
+const OrderSpecService = require("../Application/OrderSpec-service");
 
 class OrderSpecController{
     //constructor
@@ -7,6 +7,8 @@ class OrderSpecController{
         this.orderSpecDatabase = orderSpecDatabase;
     }
 
+
+    //method to create new orderspec object for db
     async createNewOrderSpec(req, order) {
 
         //create new OrderSpecificationService-Object
@@ -15,6 +17,7 @@ class OrderSpecController{
         //get all relevant information from Order request to create new order object
         //real body comes from shopify
         try {
+            //list of orderspecifications from request body
             const orderSpecList = req.body.orders;          
             
             //invoke method to add list of new orderSpec

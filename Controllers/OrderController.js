@@ -1,4 +1,4 @@
-const OrderService = require("../Application/order-service");
+const OrderService = require("../Application/Order-service");
 const CustomerController = require("./CustomerController");
 
 class OrderController{
@@ -8,6 +8,8 @@ class OrderController{
         this.customerDatabase = customerDatabase;
     }
 
+
+    //method to add new order to db 
     async createNewOrder(req) {
 
         //create new Order-Service-Object
@@ -24,7 +26,8 @@ class OrderController{
         //invoke method to add new order
         const newOrder = await orderService.createNewOrder(customer, this.orderDatabase);
 
-        console.log("OrderController return for createNewOrder: " + newOrder);
+        console.log("OrderController returns for createNewOrder: " + newOrder);
+        
         return newOrder;
     }
 }

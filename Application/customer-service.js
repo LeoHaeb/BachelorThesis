@@ -11,6 +11,7 @@ class CustomerService {
     async getCustomerWithID(id, customerDatabase) {
         try {
 
+            //get entry from customer db
             const customer = await customerDatabase.getCustomerById(id);
             const customerRow = customer.rows[0];
 
@@ -23,7 +24,7 @@ class CustomerService {
             return customerReturnObject;
         }
         catch(ex) {
-            console.log("No customer found with ID = " + id);
+            console.log("Problem in class Customer-service in method getCustomerWithID(" + id + ")");
         }
     }
 
@@ -39,22 +40,38 @@ class CustomerService {
             
             //add new Customer Object to Database
             const res = await customerDatabase.addNewCustomerDB(customer);
+
+            //change customerNr from new customer Object
+            newCustomerObject.setCustomerNr(res.rows[0]);
+
             console.log("CustomerService return for addNewCustomer: " + newCustomerObject);
             return newCustomerObject;
         } catch(ex){
-            console.log("Adding new Customer failed !\n");
+            console.log("Problem in class Customer-service in method addNewCustomer()");
         }
     }
 
 
 
-    //method to get all materials from material database
+    //method to get all customers from customer database
     async getAllCustomers() {
         try {
-            const res = await this.customerDatabase.getAllCustomersDB();
-            return res;
+            // get all entries from db
+            const allCustomers = await this.customerDatabase.getAllCustomersDB();
+
+            const returnCustomerList = [];
+
+            //create customer object for each entry and push it to list
+            for (let i = 0; i < allCustomers.rows.length; i++) {
+                var customerRow = allCustomers.rows[i];
+                var customerObj = new Customer(customerRow.cust_nr,customerRow.cust_name, customerRow.street, 
+                                                customerRow.place, customerRow.postcode, customerRow.streetnr, 
+                                                    customerRow.personal_obj, customerRow.email, customerRow.passwd );
+                                                    returnCustomerList.push(customerObj);
+            }
+            return returnCustomerList;
         } catch (ex) {
-            console.log("Getting all Customers failed !\n")
+            console.log("Problem in class Customer-service in method getAllCustomers()");
         }
     }
 
@@ -63,10 +80,11 @@ class CustomerService {
     //method to update specific material object in material database
     async updateCustomer(newCustomer) {
         try {
+            //update entryto custoemr object in db
             const res = await this.customerDatabase.updateCustomerDB(newCustomer);
             return res;
         } catch(ex) {
-            console.log("updating customer with kd_Nr = " + newCustomer.customerNr + " failed");
+            console.log("Problem in class Customer-service in method updateCustomer()");
         }
     }
 }

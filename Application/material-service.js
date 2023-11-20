@@ -9,19 +9,19 @@ class MaterialService {
     //method to get material from database for specific matNr = id
     async getMaterialwithID(id, matDatabase) {
         try {
-            //draw all information for custoemr from database
+            //get entry from database for id
             const material = await matDatabase.getMaterialEntitywithID(id);
             const materialRow = material.rows[0];
 
             //create Material Object with information from database
-            //constructor(matNr = null, recCycles=null, synthMatType=null, manufacturer=null, size=null, date=null, employee=null)
             const materialReturnObj = new Material(materialRow.matnr, materialRow.reccycles, materialRow.synthmattype, materialRow.manufacturer, materialRow.size, materialRow.date, materialRow.employee);
 
             console.log("MaterialService return for getMaterialwithID(id = " + id + "): " + materialReturnObj);
+            //return material object
             return materialReturnObj;
         }
         catch(ex) {
-            console.log("No Material found with ID = " + id);
+            console.log("Problem in class Material-service in method getMaterialwithID(" + id + ")");
         }
     }
 
@@ -41,36 +41,43 @@ class MaterialService {
             console.log("MaterialService return for addNewMaterial: " + mat);
             return mat;
         } catch(ex){
-            console.log("Adding new Material failed !\n");
+            console.log("Problem in class Material-service in method addNewMaterial");
         }
     }
 
     //method to get all materials from material database as list of Matreial Objects
     async getAllMaterials(matDatabase) {
         try {
+            //get all materials entries from db
             const allMaterials = await matDatabase.getAllMaterialsEntities();
             
+            //list for material objects
             const returnMaterialList = [];
 
+            //create material object for each entry and push it to list
             for (let i = 0; i < allMaterials.rows.length; i++) {
 
                 var materialRow = allMaterials.rows[i];
                 var materialObj = new Material(materialRow.matnr, materialRow.reccycles, materialRow.synthmattype, materialRow.employee, materialRow.manufacturer, materialRow.size, materialRow.date);
                 returnMaterialList.push(materialObj);
             }
+            
+            console.log("MaterialService return for getAllMaterials: " + returnMaterialList);
             return returnMaterialList;
         } catch (ex) {
-            console.log("Getting all Materials failed !\n")
+            console.log("Problem in class Material-service in method getAllMaterials")
         }
     }
 
     //method to update specific material object in material database
     async updateMaterial(newMat, matDatabase) {
         try {
+            //update db entry with new material object
             const res = await matDatabase.updateMaterialEntity(newMat);
+            console.log("MaterialService return for updateMaterial: " + res);
             return res;
         } catch(ex) {
-            console.log("updating material with matNr = " + newMat.matNr + " failed");
+            console.log("Problem in class Material-service in method getAllMaterials");
         }
     }
 }

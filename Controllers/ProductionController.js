@@ -1,4 +1,4 @@
-const ProductionService = require('../Application/production-service');
+const ProductionService = require('../Application/Production-service');
 const MaterialController = require('./MaterialController');
 const OrderController = require('./OrderController');
 //const CustomerController = require("./CustomerController");
@@ -11,12 +11,13 @@ class ProductionController {
         this.materialDatabase = materialDatabase;
     }
 
-    //function for adding new Products for manufacturing
+    //method for adding new Products for manufacturing
     async addNewProducts(req, res) {
 
         //gather all information from http request
         const productionList = req.body.listNewProducts;
 
+        //lists for creating product objects
         const listProductNames = [];
         const listProductAmounts = [];
         const listProductMaterials = [];
@@ -24,7 +25,7 @@ class ProductionController {
         //create MaterialController Object for working with Material Objects
         const materialController = new MaterialController(this.materialDatabase)
 
-        //productionList.forEach(async element => 
+        //fill lists
         for (let i = 0; i < productionList.length; i++) {
             //check if amount > 0
             if (productionList[i].amount && productionList[i].amount > 0 ) {

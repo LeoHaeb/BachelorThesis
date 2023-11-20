@@ -13,6 +13,7 @@ class MatDatabase{
         }
         const matData = await client.query(query);
         client.release();
+        console.log("Material-database return for getMaterialEntitywithID(" + id + "): " + JSON.stringify(matData.rows));
         return matData;
     }
 
@@ -62,7 +63,7 @@ class MatDatabase{
             } 
         });
         
-        //add attribute matNr to array, thos is ID of the database table
+        //add attribute matNr to array, this is ID of the database table
         arrayUpdateMatAttrVal.push(newMaterial["matNr"]);
 
         //sql update statement
@@ -73,7 +74,7 @@ class MatDatabase{
         }
         const res = await client.query(query);
         client.release();
-        console.log("res: " + JSON.stringify(res.rows));
+        console.log("Material-database return for updateMaterialEntity : " + JSON.stringify(res.rows));
         return res;
     }
 }

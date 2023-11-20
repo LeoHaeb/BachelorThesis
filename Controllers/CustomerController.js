@@ -1,4 +1,4 @@
-const CustomerService = require("../Application/customer-service");
+const CustomerService = require("../Application/Customer-service");
 
 class CustomerCOntroller{
 
@@ -7,7 +7,7 @@ class CustomerCOntroller{
     }
 
 
-
+    //method to get custoemr with id as cust_nr 
     async getCustomerWithID(id) {
         //create Custoemr Service Object
         const customerService = new CustomerService(this.customerDatabase);  
@@ -20,6 +20,7 @@ class CustomerCOntroller{
     }
 
 
+    //method to add custoemr to db 
     async addNewCUstomer(newCustomer) {
         //create Customer Service Object
         const customerService = new CustomerService(this.customerDatabase);  

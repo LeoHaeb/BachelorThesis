@@ -8,7 +8,7 @@ class OrderSpecService{
     constructor(){
     }
 
-    //method to add new object order to db_order
+    //method to add new object orderspec to orderspec-db
     async createNewOrderSpec(order, orderSpecList, orderSpecDatabase) {
 
         //list of orderSpecification Objects
@@ -23,8 +23,8 @@ class OrderSpecService{
                 orderSpecObjList.push(newOrderSpecObj)
             });
             
-            //add new Order to db
-            //get back id for new order
+            //add new orderspec to db
+            //get back list of IDs for each new orderspec
             const listOrderSpecIDs =  await orderSpecDatabase.addAllOrderSpecData(orderSpecObjList);
 
             //set IDs for each orderSpecEntry
@@ -32,11 +32,11 @@ class OrderSpecService{
                 orderSpecObjList[i].setOrderSpecID(listOrderSpecIDs[i]);
             };
 
+            console.log("Orderspec-service return for createNewOrderSpec: " + orderSpecObjList);
             return orderSpecObjList;
         } catch(ex) {
-            console.log("Adding new orderSpecification failed !\n");
+            console.log("Problem in class OrderSpec-service in method createNewOrderSpec");
         }
-
     }
 }
 module.exports = OrderSpecService;
