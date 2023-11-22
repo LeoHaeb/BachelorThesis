@@ -18,7 +18,7 @@ class CustomerService {
             //create new Custoemr Object with information from database 
             const customerReturnObject = new Customer(customerRow.cust_nr, customerRow.cust_name, customerRow.street, 
                                                         customerRow.place, customerRow.postcode, customerRow.streetnr, 
-                                                            customerRow.personal_obj, customerRow.email, customerRow.passwd); 
+                                                            customerRow.personal_obj, customerRow.email); 
 
             console.log("CustomerService return for getCustomerWithID(id = " + id + "): " + customerReturnObject);
             return customerReturnObject;
@@ -31,18 +31,15 @@ class CustomerService {
 
     
     //method for adding new customer object to customer database
-    async addNewCustomer(customer, customerDatabase) {
+    async addNewCustomer(customerID, customerName, customerPlace, customerPostcode, customerStreet, 
+                            customerStreetNr, personalizationObject, customerEmail, customerDatabase) {
         try{
             //create new Customer Object
-            const newCustomerObject = new Customer(customer.customerNr, customer.customerName, customer.customerAdrStreet, 
-                customer.customerAdrPlace, customer.customerPostCode, customer.customerAdrNr, customer.customerPersonalization,
-                customer.customerEmail, customer.customerPswd);
+            const newCustomerObject = new Customer(customerID, customerName, customerPlace, customerPostcode, customerStreet, 
+                                                    customerStreetNr, personalizationObject, customerEmail);
             
             //add new Customer Object to Database
-            const res = await customerDatabase.addNewCustomerDB(customer);
-
-            //change customerNr from new customer Object
-            newCustomerObject.setCustomerNr(res.rows[0]);
+            const res = await customerDatabase.addNewCustomerDB(newCustomerObject);
 
             console.log("CustomerService return for addNewCustomer: " + newCustomerObject);
             return newCustomerObject;
@@ -66,7 +63,7 @@ class CustomerService {
                 var customerRow = allCustomers.rows[i];
                 var customerObj = new Customer(customerRow.cust_nr,customerRow.cust_name, customerRow.street, 
                                                 customerRow.place, customerRow.postcode, customerRow.streetnr, 
-                                                    customerRow.personal_obj, customerRow.email, customerRow.passwd );
+                                                    customerRow.personal_obj, customerRow.email);
                                                     returnCustomerList.push(customerObj);
             }
             return returnCustomerList;

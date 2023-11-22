@@ -24,19 +24,37 @@ orderRouter.post('/addNewOrder', async function(req, res) {
 
         console.log("http-request to create new order\n");
 
-        //invoke method from Controller layer to add new order
-        const order = await orderController.createNewOrder(req);
-        console.log("order with orderID = " + order.orderID + " and customerID: " + order.customer.customerNr);
+        //check if only 1 order or more
+        //create list of orders
+        if (req.body.order) {
+            var reqBodyOrderList = [req.body.order]
+        } else if (req.body.orders) {
+            var reqBodyOrderList = req.body.orders
+        } else {
+            console.log("request has no orders")
+        }
 
-        //invoke method from Controller layer to add new orderSpecification
-        const ordereSpecDatabase = new orderSpecDatabase(dBConnection);
+        //list of order Objects for return 
+        const returnListOrders = []
 
-        const orderSpecController = new OrderSpecController(ordereSpecDatabase);
-        const orderSpecificationResult = await orderSpecController.createNewOrderSpec(req, order);
+        //go through list of orders
+        for (let i = 0; i < reqBodyOrderList.length; i++) {
+            //invoke method from Controller layer to add new order
+            const order = await orderController.createNewOrder(reqBodyOrderList[i]);
+            console.log("order with orderID = " + order.orderID + " and customerID: " + order.customer.customerNr);
+            returnListOrders.push(order)
 
-        console.log("added new orderspecification for order");
+            //invoke method from Controller layer to add new orderSpecification
+            const ordereSpecDatabase = new orderSpecDatabase(dBConnection);
 
-        res.send(order);
+            const orderSpecController = new OrderSpecController(ordereSpecDatabase);
+            const orderSpecificationResult = await orderSpecController.createNewOrderSpec(reqBodyOrderList[i], order);
+
+            console.log("added new orderspecification for order");
+        }
+
+
+        res.send(returnListOrders);
     } catch(ex) {
         res.status(404).json({error: error.message})
     }

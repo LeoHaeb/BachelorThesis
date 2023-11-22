@@ -10,21 +10,30 @@ class OrderController{
 
 
     //method to add new order to db 
-    async createNewOrder(req) {
+    async createNewOrder(singleOrder) {
 
         //create new Order-Service-Object
         const orderService = new OrderService();
 
-        //get all relevant information from Order request to create new order object
-        //real body comes from shopify
-        const custNr = req.body.custNr;
+        //get customer and customerNr from order
+        const reqCustomer = singleOrder.customer;
+        const custNr = reqCustomer.id;
+
 
         //get customerObj from db with customerNr
         const customerController = new CustomerController(this.customerDatabase);
-        const customer = await customerController.getCustomerWithID(custNr);
+        var customer = await customerController.getCustomerWithID(custNr);
+
+        //check whether customer already in db
+        if (!(customer)) {
+            console.log("customer not yet available, create new customer ");
+
+            var customer = await customerController.addNewCUstomer(reqCustomer);
+        }
+        
 
         //invoke method to add new order
-        const newOrder = await orderService.createNewOrder(customer, this.orderDatabase);
+        const newOrder = await orderService.createNewOrder(singleOrder, customer, this.orderDatabase);
 
         console.log("OrderController returns for createNewOrder: " + newOrder);
         

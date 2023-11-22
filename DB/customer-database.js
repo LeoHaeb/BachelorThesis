@@ -37,10 +37,10 @@ class CustomerDatabase {
         const client = await this.pool.connect();
         const query = {
             //text: 'insert into db_customer(kd_name, personalng_obj, street, place, streetnr, email, passwd) values ($1, $2, $3, $4, $5, $6, crypt($7, gen_salt(\'md5\'))) returning kd_nr;',
-            text: 'insert into db_customer(cust_nr, cust_name, personal_obj, street, place, streetnr, email, passwd, postcode) values ($1, $2, $3, $4, $5, $6, crypt($7, gen_salt(\'md5\')), $8) returning cust_nr;',
-            values: [customer.customerNr, customer.customerName, JSON.stringify(customer.customerPersonalization), customer.customerAdrStreet, customer.customerAdrPlace, customer.customerAdrNr, customer.customerEmail, customer.customerPswd, customer.customerPostCode]
+            text: 'insert into db_customer(cust_nr, cust_name, personal_obj, street, place, streetnr, email, postcode) values ($1, $2, $3, $4, $5, $6, $7, $8) returning cust_nr;',
+            values: [customer.customerNr, customer.customerName, JSON.stringify(customer.customerPersonalization), customer.customerAdrStreet, customer.customerAdrPlace, customer.customerAdrNr, customer.customerEmail, customer.customerPostCode]
         }
-        const res = client.query(query);
+        const res = await client.query(query);
         client.release();
 
         console.log("Customer-database return for addNewCustomerDB : " + JSON.stringify(res));

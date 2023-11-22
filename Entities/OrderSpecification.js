@@ -1,9 +1,9 @@
 class OrderSpecification {
 
-    constructor(orderSpecID = null, order = null, productSec = null, personalization = null, amount = null) {
+    constructor(orderSpecID = null, order = null, productSpec = null, personalization = null, amount = null) {
         this.orderSpecID = orderSpecID;
         this.order = order;
-        this.productSec = productSec;
+        this.productSpec = productSpec;
         this.personalization = personalization;
         this.amount = amount;
     }

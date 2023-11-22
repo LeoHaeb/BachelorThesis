@@ -9,11 +9,11 @@ class OrderService{
     }
 
     //method to add new object order to order db
-    async createNewOrder(customerObj, orderDatabase) {
+    async createNewOrder(singleOrder, customerObj, orderDatabase) {
         try {
 
             //create order object
-            const newOrderObject = new Order(null, customerObj);
+            const newOrderObject = new Order(singleOrder.id, customerObj);
             
             //add new Order to db
             //get back id for new order

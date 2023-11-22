@@ -89,7 +89,7 @@ customerRouter.post('/addNewCustomer/', async function(req, res) {
 
     try {
         //add new costumer to database
-        const addedCustomer = await customerController.addNewCUstomer(customer);
+        const addedCustomer = await customerController.addNewCUstomer(req);
         console.log("added Customer: " + JSON.stringify(addedCustomer));
         res.send(addedCustomer);
     } catch(error) {

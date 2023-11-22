@@ -4,15 +4,17 @@ class OrderSpecDatabase {
     }
 
     //create new Order Entity in database
-    async addAllOrderSpecData(orderSpecList) {
+    async addAllOrderSpecData(orderSpecObjList) {
 
         //list for returning IDs from db 
         var listResultIDs = [];
         const client = await this.pool.connect();
 
         //create 2D-list of orderSpecs
-        for (let orderSpecNr = 0; orderSpecNr < orderSpecList.length; orderSpecNr++) {
-            var row = [orderSpecList[orderSpecNr].order.orderID, orderSpecList[orderSpecNr].productSec, orderSpecList[orderSpecNr].personalization, orderSpecList[orderSpecNr].amount];
+        //boolean value for personalization attribute is set to false per default until clear how personalization object is provided to server
+        for (let orderSpecNr = 0; orderSpecNr < orderSpecObjList.length; orderSpecNr++) {
+            var row = [orderSpecObjList[orderSpecNr].order.orderID, orderSpecObjList[orderSpecNr].productSpec, 
+                        false, orderSpecObjList[orderSpecNr].amount];
 
             var query = {
                 text: 'insert into db_orderspecification(order_id, prod_spec, personaliz, amount) values ($1, $2, $3, $4) returning id_orderspec;',

@@ -7,8 +7,8 @@ class OrderDatabase {
     async createNewOrderEntity(order) {
         const client = await this.pool.connect();
         const query = {
-            text: 'insert into db_order(customer_nr) values ($1) returning order_id;',
-            values: [order.customer.customerNr]
+            text: 'insert into db_order(order_id, customer_nr) values ($1, $2) returning order_id;',
+            values: [order.orderID, order.customer.customerNr]
         }
         const res = await client.query(query);
         client.release();

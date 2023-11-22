@@ -9,15 +9,15 @@ class OrderSpecService{
     }
 
     //method to add new object orderspec to orderspec-db
-    async createNewOrderSpec(order, orderSpecList, orderSpecDatabase) {
+    async createNewOrderSpec(listOrderItems, reOrderObj, orderSpecDatabase) {
 
         //list of orderSpecification Objects
         var orderSpecObjList = [];
 
         try {
-            orderSpecList.forEach(element => {
+            listOrderItems.forEach(element => {
                 //create new orderSpecification Object
-                const newOrderSpecObj = new OrderSpec(null, order, element.product, element.personalization, element.amount, );
+                const newOrderSpecObj = new OrderSpec(null, reOrderObj, element.name, "default_personalization", element.quantity );
 
                 //add new Object to list
                 orderSpecObjList.push(newOrderSpecObj)
