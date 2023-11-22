@@ -1,4 +1,3 @@
-const { errors } = require("pg-promise");
 const OrderSpecService = require("../Application/OrderSpec-service");
 
 class OrderSpecController{

@@ -5,6 +5,9 @@ const DBConnection = require('../DataBaseConnection');
 const ProductionDatabase = require('../DB/Production-database');
 const MaterialDatabase = require('../DB/Material-database');
 
+//for qr-code creation
+const QRCode = require('qrcode');
+
 //integrate path module
 const path = require('path');
 
@@ -29,6 +32,10 @@ productionRouter.post('/addNewProductsToProduction/', async function(req, res) {
 
         const addedProducts = await productionController.addNewProducts(req, res);
         console.log("added products: " + addedProducts);
+
+        //create QR code example to www.google.de
+        QRCode.toFile("qrCodeExample.jpg", "www.google.de" + addedProducts[0].indizes[0], { errorCorrectionLevel: 'H' });
+
         res.send(addedProducts);
     } catch (ex) {
         res.status(404).json({error: error.message})
