@@ -29,6 +29,22 @@ class ProductionDatabase {
 
         return listProductID;
     }
+
+
+    //method to get product by id from db
+    async getProductEntityByID(id) {
+        const query = {
+            text: 'select * from db_production where id_product = $1',
+            values: [id],
+        }
+        const client = await this.pool.connect();
+        const productData = await client.query(query);
+        client.release();
+
+        console.log("production-database return for getProductEntityByID : " + JSON.stringify(productData.rows));
+        return productData;
+    }
+
 }
 
 module.exports = ProductionDatabase;

@@ -4,15 +4,22 @@ const orderRouter = require("../Routing/Routing-order");
 
 //has only one attribute: customerID -> custoemr who has ordered 
 class Order{
-    constructor(orderID = null, customerObj) {
-        this.orderID = orderID;
+    constructor(productOrderID = null, customerObj, shopify_orderID, productSpec, boolPersonalization, amount) {
+        this.productOrderID = productOrderID;
         this.customer = customerObj;
+        this.shopify_orderID = shopify_orderID;
+        this.productSpec = productSpec;
+        this.boolPersonalization = boolPersonalization;
+        this.amount = amount;
     }
 
-    setOrderID(id) {
-        this.orderID = id;
+    setProductOrderID(id) {
+        this.productOrderID = id;
     }
 
+    setCustomerObj(customerObject) {
+        this.customer = customerObject;
+    }
 }
 
 module.exports = Order;

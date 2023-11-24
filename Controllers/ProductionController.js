@@ -1,15 +1,47 @@
 const ProductionService = require('../Application/Production-service');
 const MaterialController = require('./MaterialController');
 const OrderController = require('./OrderController');
-//const CustomerController = require("./CustomerController");
+const CustomerController = require("./CustomerController");
 
 
 class ProductionController {
 
-    constructor(productionDatabase, materialDatabase) {
+    constructor(productionDatabase, materialDatabase, orderDatabase, customerDatabase) {
         this.productionDatabase = productionDatabase;
         this.materialDatabase = materialDatabase;
+        this.orderDatabase = orderDatabase;
+        this.customerDatabase = customerDatabase;
     }
+
+
+    //method to get product object with productID as id
+    async getProductWithID(id) {
+        //create productionService Object
+        const productionService = new ProductionService();
+
+        //invoke method from Use Case Layer to work with product object, dependency injection with production database
+        const product = await productionService.getProductWithID(id, this.productionDatabase);
+
+        //get material object from db
+        const materialController = new MaterialController(this.materialDatabase);
+        const materialObj = await materialController.getMaterialwithID(product.material);
+        //set material Object to product Object
+        product.setMaterialObj(materialObj);
+
+        //get order Object from db
+        const orderController = new OrderController(this.orderDatabase, this.customerDatabase);
+        // check if order already asigned to product
+        if (product.customer) {
+            const orderObject = await orderController.getProductOrderWithID(product.customer);
+            //set order Object to product Object
+            product.setOrderObj(orderObject);
+        }
+
+        console.log("ProductionController return for getProductwithID: " + product);
+        //return product object
+        return product;
+    }
+
 
     //method for adding new Products for manufacturing
     async addNewProducts(req, res) {
@@ -43,10 +75,10 @@ class ProductionController {
         const productionService = new ProductionService();
 
         //invoke method to add new product
-        const addedProducts = await productionService.addNewProducts(listProductNames, listProductAmounts, listProductMaterials, this.productionDatabase);
+        const addedProductsIndexList = await productionService.addNewProducts(listProductNames, listProductAmounts, listProductMaterials, this.productionDatabase);
 
-        console.log("ProductionController return indexlist for addNewProduct: " + addedProducts);
-        return addedProducts;
+        console.log("ProductionController return indexlist for addNewProduct: " + addedProductsIndexList);
+        return addedProductsIndexList;
     }
 }
 

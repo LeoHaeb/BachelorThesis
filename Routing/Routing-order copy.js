@@ -40,19 +40,22 @@ orderRouter.post('/addNewOrder', async function(req, res) {
         //go through list of orders
         for (let i = 0; i < reqBodyOrderList.length; i++) {
             //invoke method from Controller layer to add new order
-            const listAddedOrders = await orderController.createNewProductOrders(reqBodyOrderList[i]);
-            
-            console.log("added all orders:\n " + listAddedOrders);
+            const order = await orderController.createNewOrder(reqBodyOrderList[i]);
+            console.log("order with orderID = " + order.orderID + " and customerID: " + order.customer.customerNr);
+            returnListOrders.push(order)
 
-            // add orders to return list
-            listAddedOrders.forEach(order => {
-                returnListOrders.push(order)
-            });
+            //invoke method from Controller layer to add new orderSpecification
+            const ordereSpecDatabase = new orderSpecDatabase(dBConnection);
+
+            const orderSpecController = new OrderSpecController(ordereSpecDatabase);
+            const orderSpecificationResult = await orderSpecController.createNewOrderSpec(reqBodyOrderList[i], order);
+
+            console.log("added new orderspecification for order");
         }
 
+
         res.send(returnListOrders);
-    } catch(error) {
-        console.log(error.message);
+    } catch(ex) {
         res.status(404).json({error: error.message})
     }
 });

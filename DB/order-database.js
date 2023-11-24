@@ -15,6 +15,37 @@ class OrderDatabase {
         console.log("Order-database return for createNewOrder : " + JSON.stringify(res.rows));
         return res;
     }
+
+
+
+    async addAllOrderEntities(listProductOrders) {
+        
+        //list for returning IDs from db 
+        var listResultIDs = [];
+        const client = await this.pool.connect();
+
+        //create 2D-list of orderSpecs
+        //boolean value for personalization attribute is set to false per default until clear how personalization object is provided to server
+        for (let productOrderNr = 0; productOrderNr < listProductOrders.length; productOrderNr++) {
+            var row = [listProductOrders[productOrderNr].shopify_orderID, listProductOrders[productOrderNr].productSpec, 
+                        listProductOrders[productOrderNr].boolPersonalization, listProductOrders[productOrderNr].amount, 
+                        parseInt(listProductOrders[productOrderNr].customer.customerNr)];
+
+            var query = {
+                text: 'insert into db_product_ordering(shopify_order_id, prod_spec, personaliz, amount, customer_id) values ($1, $2, $3, $4, $5) returning product_order_id;',
+                values: row
+                //values: [[12, 'Geldbeutel XL', true, 10], [12, 'Geldbeutel XXL', false, 20]]
+                //values: [[12, 12], ['geldbeutel XL', 'geldbeutel XXL'], [true, false], [10, 20]]
+            }
+            var res = await client.query(query);
+            //add result to list
+            listResultIDs.push(res.rows[0].product_order_id)
+        }
+
+        client.release();
+        console.log("Order-database return for createNewOrderSpec : " + listResultIDs);
+        return listResultIDs;
+    }
 }
 
 module.exports = OrderDatabase;
