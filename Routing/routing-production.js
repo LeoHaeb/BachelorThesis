@@ -2,6 +2,8 @@ const express = require('express');
 const ProductionController = require('../Controllers/ProductionController');
 const MaterialController = require('../Controllers/MaterialController');
 const OrderController = require('../Controllers/OrderController');
+const CustomerCOntroller = require('../Controllers/CustomerController');
+
 //integrate module for connection to database
 const DBConnection = require('../DataBaseConnection');
 const ProductionDatabase = require('../DB/Production-database');
@@ -9,13 +11,15 @@ const MaterialDatabase = require('../DB/Material-database');
 const OrderDatabase = require('../DB/Order-database');
 const CustomerDatabase = require('../DB/Customer-database');
 
+//for testing
+var createHTML = require('create-html')
+
 //for qr-code creation
 const QRCode = require('qrcode');
 
 //integrate path module
 const path = require('path');
 const { appendFile } = require('fs');
-const CustomerCOntroller = require('../Controllers/CustomerController');
 
 //create routing-object from express middleware 
 var productionRouter = express.Router();
@@ -55,18 +59,42 @@ productionRouter.post('/addNewProductsToProduction/', async function(req, res) {
                 var nameQrCode = addedProducts[i].indizes[j].toString().padStart(5, '0');
 
                 //information for customer to pass to QR-Code
-                const infoProductObj = await productionController.getProductWithID(addedProducts[i].indizes[j]);
-                const infoMaterialNr = infoProductObj.material.matNr;
+                var infoProductObj = await productionController.getProductWithID(addedProducts[i].indizes[j]);
+                var infoProductID = infoProductObj.productID;
+                var infoMaterialNr = infoProductObj.material.matNr;
+                var infoMaterialRecCycles = infoProductObj.material.recCycles;
+                var infoSynthMatType = infoProductObj.material.synthMatType;
+                var infoManufacturer = infoProductObj.material.manufacturer;
+
+                //create string for qr-code
+                var qrCodeString = "www.BspServer.de?productID=" + infoProductID + "&matRecCycles=" + infoMaterialRecCycles + "&synthMatType=" + infoSynthMatType + "&manufacturer=" + infoManufacturer;
+
+                //Kunde->Kaufdatum, Garantie, Rücksendeeticket
 
                 //create QR-Code
-                QRCode.toFile("./QRCodes/" + nameQrCode + ".png", "www.BspServer.de/" + parseInt(infoMaterialNr), {type: 'png', width: 100, mode: "alphanumeric", deflateLevel: 20, errorCorrectionLevel: 'L'});
+                QRCode.toFile("./QRCodes/" + nameQrCode + ".png", qrCodeString, {type: 'png', width: 100, mode: "alphanumeric", deflateLevel: 20, errorCorrectionLevel: 'L'});
+
+/*                 //for testing: create html document
+                var newHTMLdoc = createHTML({
+                    title: 'qr-Code-test',
+                    body: '<p>example</p>'
+                })
+
+                QRCode.toFile("./QRCodes/" + nameQrCode + "_test" + ".png", newHTMLdoc, {type: 'png', mode: "alphanumeric", deflateLevel: 20, errorCorrectionLevel: 'L'}); */
             }
         }
-
         res.send(addedProducts);
     } catch (error) {
+        console.log("error: " + error);
         res.status(404).json({error: error.message})
     }
+})
+
+
+//post-request to update database with failed production cases
+productionRouter.post('/updateFailedProducts/', async function(req, res) {
+    const info = req.body;
+
 })
 
 

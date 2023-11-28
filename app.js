@@ -5,6 +5,7 @@ const matRouter = require('./Routing/Routing-material.js');
 const customerRouter = require('./Routing/Routing-customers.js');
 const orderRouter = require('./Routing/Routing-order.js');
 const productionRouter = require('./Routing/Routing-production.js');
+const productionFailRouter = require('./Routing/Routing-productionFails.js');
 const bodyParser = require('body-parser')
 
 //use Express framework 
@@ -35,3 +36,6 @@ app.use('/order/', orderRouter);
 app.use('/production/', productionRouter);
 app.use('/production/', express.static(path.join(__dirname, "public")));
 
+//Routing for requests to productionFails
+app.use('/productionFails/', productionFailRouter);
+app.use('/productionFails/', express.static(path.join(__dirname, "public")));

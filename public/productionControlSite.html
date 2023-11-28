@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<head>
+    <link rel="stylesheet" href="productionControlSite.css">
+    <script language="JavaScript" type="text/javascript" src="FunctionsProductionFail.js"></script>
+
+</head>
+<html>
+    <title>Production Control side</title>
+    <body>
+            <div id="divCutting">
+                <h1>Zuschneiden</h1> 
+                <br>
+                <table id="tableCutting">
+                    <th>Produktspezifikation</th>
+                    <th>Anzahl Ausfälle Zuschneiden</th>
+                    <tr>
+                        <td>GB(L)</td>
+                        <td><input type="text" id="amount_GB_L_cutting" name="inputProductionFail"></td>
+                    </tr>
+                    <tr>
+                        <td>GB(XL)</td>
+                        <td><input type="text" id="amount_GB_XL_cutting" name="inputProductionFail"></td>
+                    </tr>
+                    <tr>
+                        <td>GB(XXL)</td>
+                        <td><input type="text" id="amount_GB_XXL_cutting" name="inputProductionFail"></td>
+                    </tr>
+                    <tr>
+                        <td>Tasche</td>
+                        <td><input type="text" id="amount_suitcase_cutting" name="inputProductionFail"></td>
+                    </tr>
+                </table>
+                <br>
+                <button onclick="noteProductionFail(1)">übermitteln</button>
+            </div>
+            <div id="divWelding">
+                <h1>Verschweißen</h1>
+                <br>
+                <table id="tableWelding">
+                    <th>Produktspezifikation</th>
+                    <th>Anzahl Ausfälle Verschweißen</th>
+                    <tr>
+                        <td>GB(L)</td>
+                        <td><input type="text" id="amount_GB_L_welding" name="inputProductionFail"></td>
+                    </tr>
+                    <tr>
+                        <td>GB(XL)</td>
+                        <td><input type="text" id="amount_GB_XL_welding" name="inputProductionFail"></td>
+                    </tr>
+                    <tr>
+                        <td>GB(XXL)</td>
+                        <td><input type="text" id="amount_GB_XXL_welding" name="inputProductionFail"></td>
+                    </tr>
+                    <tr>
+                        <td>Tasche</td>
+                        <td><input type="text" id="amount_suitcase_welding" name="inputProductionFail"></td>
+                    </tr>
+                </table>
+                <br>
+                <button onclick="noteProductionFail(2)">übermitteln</button>
+            </div>
+            <div id="divLaserCutting">
+                <h1>Laser & Ausschneiden</h1> 
+                <br>
+                <table id="tableLaserCutting">
+                    <th>Produktspezifikation</th>
+                    <th>Anzahl Ausfälle Laser & Ausschneiden</th>
+                    <tr>
+                        <td>GB(L)</td>
+                        <td><input type="text" id="amount_GB_L_LaserCutting" name="inputProductionFail"></td>
+                    </tr>
+                    <tr>
+                        <td>GB(XL)</td>
+                        <td><input type="text" id="amount_GB_XL_LaserCutting" name="inputProductionFail"></td>
+                    </tr>
+                    <tr>
+                        <td>GB(XXL)</td>
+                        <td><input type="text" id="amount_GB_XXL_LaserCutting" name="inputProductionFail"></td>
+                    </tr>
+                    <tr>
+                        <td>Tasche</td>
+                        <td><input type="text" id="amount_suitcase_LaserCutting" name="inputProductionFail"></td>
+                    </tr>
+                </table>
+                <br>
+                <button onclick="noteProductionFail(3)">übermitteln</button>
+            </div>
+        </table>
+    </body>
+</html>
