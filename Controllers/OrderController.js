@@ -35,21 +35,29 @@ class OrderController{
         //create new Order-Service-Object
         const orderService = new OrderService();
 
-        //get customer and customerNr from order
-        const reqCustomer = singleOrder.customer;
-        const custNr = reqCustomer.id;
-
-
-        //get customerObj from db with customerNr
+        //create Custoemr Controller Object
         const customerController = new CustomerController(this.customerDatabase);
-        var customer = await customerController.getCustomerWithID(custNr);
 
-        //check whether customer already in db
-        if (!(customer)) {
-            console.log("customer not yet available, create new customer ");
 
-            var customer = await customerController.addNewCUstomer(reqCustomer);
+        //get customer Object and customerNr from order
+        //const reqCustomer = singleOrder.customer;
+        if (singleOrder.customer && singleOrder.customer.id) {
+            const custNr = singleOrder.customer.id;
+
+            //get customerObj from db with customerNr
+            var customer = await customerController.getCustomerWithID(custNr);    
+
+            if (!(customer)){
+                console.log("customer with id = " + custNr + " not yet available, create new customer ");
+                var customer = await customerController.addNewCUstomer(singleOrder);           
+            }
+
+        } else {
+            // if no custoemr in req at all   
+            console.log("no customer reference in request, create new customer");
+            var customer = await customerController.addNewDefaultCustomer(singleOrder);           
         }
+
         
         //gather all information from singleOrder to pass to next layer
         const listOrderItems = singleOrder.line_items;

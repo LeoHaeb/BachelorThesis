@@ -18,6 +18,56 @@ const path = require('path');
 //post-request to update database with failed production cases
 productionFailRouter.post('/updateFailedProducts/', async function(req, res) {
     const info = req.body;
+
+    try {
+        //create database connectionObject
+        const dbConnection = new DBConnection();
+
+        //create Database Objects with Connection to PostgreSQL
+        const productionDatabase = new ProductionDatabase(dbConnection);
+        const materialDatabase = new MaterialDatabase(dbConnection);
+        const orderDatabase = new OrderDatabase(dbConnection);
+        const customerDatabase = new CustomerDatabase(dbConnection);
+
+        //create controller objects
+        const productionController = new ProductionController(productionDatabase, materialDatabase, orderDatabase, customerDatabase);
+
+        console.log("http-request to update production table with failed products\n");
+
+        const updatedProductIDs = await productionController.updateProductionFails(req, res);
+        res.send(updatedProductIDs);
+    } catch(error) {
+        console.log("error: " + error);
+        res.status(404).json({error: error.message})
+    }
+})
+
+
+//post-request to update database with visual inspection after product passed manufacturing line
+productionFailRouter.post('/visualInspectionManufacturing/', async function(req, res) {
+    const info = req.body;
+
+    try {
+        //create database connectionObject
+        const dbConnection = new DBConnection();
+
+        //create Database Objects with Connection to PostgreSQL
+        const productionDatabase = new ProductionDatabase(dbConnection);
+        const materialDatabase = new MaterialDatabase(dbConnection);
+        const orderDatabase = new OrderDatabase(dbConnection);
+        const customerDatabase = new CustomerDatabase(dbConnection);
+
+        //create controller objects
+        const productionController = new ProductionController(productionDatabase, materialDatabase, orderDatabase, customerDatabase);
+
+        console.log("http-request to update production table with visual inspection of products after manufacturing line\n");
+
+        const updatedProductIDs = await productionController.updateProductionInspection(req, res);
+        res.send(updatedProductIDs);
+    } catch(error) {
+        console.log("error: " + error);
+        res.status(404).json({error: error.message})
+    }
 })
 
 

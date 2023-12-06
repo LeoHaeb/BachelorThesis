@@ -80,6 +80,51 @@ class ProductionController {
         console.log("ProductionController return indexlist for addNewProduct: " + addedProductsIndexList);
         return addedProductsIndexList;
     }
+
+
+    //method to update production table for failed production steps
+    async updateProductionFails(req, res) {
+
+        //gather all infromation from http request
+        const productionFails = {
+            "prodfail": req.body.productionStep,
+            "GB_L": req.body.amountFailedPurse_L,
+            "GB_XL": req.body.amountFailedPurse_XL,
+            "GB_XXL": req.body.amountFailedPurse_XXL,
+            "suitcase": req.body.amountFailedSuitCase
+        }
+
+        //create new porduction Service Object
+        const productionService = new ProductionService();
+
+        //invoke method to add new product
+        const updatedProductionIDs = await productionService.updateProductionFails(productionFails, this.productionDatabase);
+
+        console.log("ProductionController return indexlist for updateProductionFails: " + updatedProductionIDs);
+        return updatedProductionIDs;
+    }
+
+
+    //method to update production table for failed production steps
+    async updateProductionInspection(req, res) {
+
+        //gather all infromation from http request
+        const productInspections = {
+            "GB_L": req.body.amountPurseInspection_L,
+            "GB_XL": req.body.amountPurseInspection_XL,
+            "GB_XXL": req.body.amountPurseInspection_XXL,
+            "suitcase": req.body.amountSuitCaseInspection
+        }
+
+        //create new porduction Service Object
+        const productionService = new ProductionService();
+
+        //invoke method to add new product
+        const updatedProductionIDs = await productionService.updateProductionInspections(productInspections, this.productionDatabase);
+
+        console.log("ProductionController return indexlist for updateProductionInspection: " + updatedProductionIDs);
+        return updatedProductionIDs;
+    }
 }
 
 module.exports = ProductionController;

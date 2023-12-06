@@ -32,6 +32,11 @@ async function noteProductionFail(productionStep) {
             amountFailedSuitCase = document.getElementById("amount_suitcase_LaserCutting").value;
     }
 
+    var allInputFields = document.getElementsByName('inputProductionFail');
+    allInputFields.forEach(element => {
+        element.value = '';        
+    });
+
     //create JSON Object for POST Request
     const updateinformation = {
         "productionStep": productionStep,
@@ -49,4 +54,38 @@ async function noteProductionFail(productionStep) {
             'Content-Type': 'application/JSON'},
         body: JSON.stringify(updateinformation)
     });
+}
+
+async function visualInspectionManufacturing() {
+
+    //get values from inputs
+    amountPurse_L_OK = document.getElementById("amount_GB_L_EOL_OK").value;
+    amountPurse_L_NOK = document.getElementById("amount_GB_L_EOL_NOK").value;
+
+    amountPurse_XL_OK = document.getElementById("amount_GB_XL_EOL_OK").value;
+    amountPurse_XL_NOK = document.getElementById("amount_GB_XL_EOL_NOK").value;
+
+    amountPurse_XXL_OK = document.getElementById("amount_GB_XXL_EOL_OK").value;
+    amountPurse_XXL_NOK = document.getElementById("amount_GB_XXL_EOL_NOK").value;
+
+    amountSuitCase_OK = document.getElementById("amount_suitcase_EOL_OK").value;
+    amountSuitCase_NOK = document.getElementById("amount_suitcase_EOL_NOK").value;
+
+
+    //create JSON Object for POST Request
+    const visualInspectionInfo = {
+        "amountPurseInspection_L": [amountPurse_L_OK, amountPurse_L_NOK],
+        "amountPurseInspection_XL": [amountPurse_XL_OK, amountPurse_XL_NOK],
+        "amountPurseInspection_XXL": [amountPurse_XXL_OK, amountPurse_XXL_NOK],
+        "amountSuitCaseInspection": [amountSuitCase_OK, amountSuitCase_NOK],
+    }
+
+
+    const response = await fetch("http://localhost:8080/productionFails/visualInspectionManufacturing/", {
+        method: "POST",
+        headers: {
+            'Accept': 'application/JSON',
+            'Content-Type': 'application/JSON'},
+        body: JSON.stringify(visualInspectionInfo)
+    })
 }

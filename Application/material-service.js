@@ -22,6 +22,7 @@ class MaterialService {
         }
         catch(ex) {
             console.log("Problem in class Material-service in method getMaterialwithID(" + id + ")");
+            console.log("error: " + ex);
         }
     }
 
@@ -66,6 +67,7 @@ class MaterialService {
             return returnMaterialList;
         } catch (ex) {
             console.log("Problem in class Material-service in method getAllMaterials")
+            console.log("error: " + ex);
         }
     }
 
@@ -78,6 +80,7 @@ class MaterialService {
             return res;
         } catch(ex) {
             console.log("Problem in class Material-service in method getAllMaterials");
+            console.log("error: " + ex);
         }
     }
 }

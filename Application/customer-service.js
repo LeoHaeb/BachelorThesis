@@ -31,15 +31,18 @@ class CustomerService {
 
     
     //method for adding new customer object to customer database
-    async addNewCustomer(customerID, customerName, customerPlace, customerPostcode, customerStreet, 
-                            customerStreetNr, personalizationObject, customerEmail, customerDatabase) {
+    async addNewCustomer(customerID, customerEmail, contactEmail, personalizationObject, addresses, customerDatabase) {
         try{
             //create new Customer Object
-            const newCustomerObject = new Customer(customerID, customerName, customerPlace, customerPostcode, customerStreet, 
-                                                    customerStreetNr, personalizationObject, customerEmail);
+            const newCustomerObject = new Customer(customerID, customerEmail, contactEmail, personalizationObject, addresses);
             
             //add new Customer Object to Database
             const res = await customerDatabase.addNewCustomerDB(newCustomerObject);
+
+            //set customer id if necessary
+            if (!customerID) {
+                newCustomerObject.setCustomerNr(res.rows[0].cust_nr);
+            }
 
             console.log("CustomerService return for addNewCustomer: " + newCustomerObject);
             return newCustomerObject;

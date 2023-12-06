@@ -69,6 +69,33 @@ class ProductionService {
         }
     }
 
+
+    //method to update production database with production fails
+    async updateProductionFails(updates, productionDatabase) {
+        try {
+            //update production db with information from updates about failed products
+            const failedProductIDs = await productionDatabase.updateProductEntitiesFails(updates);
+
+            console.log("ProductionService return list of indizes for updateProductionFails: " + failedProductIDs);
+            return failedProductIDs;
+        } catch(error) {
+            console.log("error: " + error);
+        }
+    }
+
+
+    //Method to update production database with product inspections
+    async updateProductionInspections(inspections, productionDatabase) {
+        try {
+            //update production db with information from updates about failed products
+            const inspectedProductIDs = await productionDatabase.updateProductEntitiesInspection(inspections);
+
+            console.log("ProductionService return list of indizes for updateProductionInspections: " + inspectedProductIDs);
+            return inspectedProductIDs;
+        } catch(error) {
+            console.log("error: " + error);
+        }
+    }
 }
 
 module.exports = ProductionService;

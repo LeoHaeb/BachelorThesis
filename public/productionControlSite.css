@@ -1,6 +1,42 @@
-#divCutting, #divWelding, #divLaserCutting {
+html, body {
+    min-height: 100%;
+}
+
+#divCutting, #divWelding, #divLaserCutting, #divManufacturingControl {
     border: 1px solid black;
     float: left;
-    width: 33%;
+    width: 24%;
     height: 100%;
+}
+
+.inputVisu{
+    width: 80%;
+}
+
+h1 {
+    text-align: center;
+}
+
+th {
+    text-align: left;
+}
+
+#tableCutting, #tableWelding, #tableLaserCutting, #tableVisualInspectionEOL {
+    width: 100%;
+}
+
+#tableVisualInspectionEOL:nth-child(1) {
+    background-color: red;
+}
+
+#idButtonVisuInspectionManufacturingOK {
+    width: 100%;
+    height: 100px;
+    background-color: yellow;
+}
+
+#idButtonVisuInspectionManufacturingNOK {
+    width: 100%;
+    height: 100px;
+    background-color: red;
 }
