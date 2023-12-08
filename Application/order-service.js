@@ -28,8 +28,35 @@ class OrderService{
         }
     }
 
+
+    //method to get several orders fomr db
+    async getSomeOrders(amount, orderDatabase) {
+        try {
+            //return list of Order Objects
+            const orderObjReturnList = [];
+
+            //get entry from database for id
+            const orderList = await orderDatabase.getProductionOrderEntities(amount);
+
+            for (let i = 0; i < orderList.rows.length; i++) {
+                const orderRow = orderList.rows[i];
+                //create order Object with information from database
+                const orderObj = new Order(orderRow.product_order_id, orderRow.customer_id, orderRow.shopify_order_id, orderRow.prod_spec, orderRow.personaliz, orderRow.amount, orderRow.orderdate);
+                orderObjReturnList.push(orderObj)
+            }
+
+            console.log("OrderService return for getSomeOrders: " + orderObjReturnList);
+            //return order object
+            return orderObjReturnList;
+        }
+        catch(error) {
+            console.log("Problem in class Order-service in method getSomeOrders");
+            console.log("error: " + error)
+        }
+    }
+
     //method to add new object order to order db
-    async createNewProductOrders(customer, listOrderItems, shopifyOrderID, boolPersonalization, orderDatabase) {
+    async createNewProductOrders(customer, listOrderItems, shopifyOrderID, boolPersonalization, orderDate, orderDatabase) {
         try {
 
             //list to store all create order Objects
@@ -37,7 +64,7 @@ class OrderService{
 
             listOrderItems.forEach(orderItem => {
                 //create new productOrder Object for each entry in items
-                const newPorductOrderObj = new Order(null, customer, shopifyOrderID, orderItem.name, boolPersonalization, orderItem.quantity);
+                const newPorductOrderObj = new Order(null, customer, shopifyOrderID, orderItem.name, boolPersonalization, orderItem.quantity, orderDate);
 
                 //add new Object to list
                 productOrderList.push(newPorductOrderObj)

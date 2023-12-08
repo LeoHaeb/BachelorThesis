@@ -15,10 +15,36 @@ class CustomerService {
             const customer = await customerDatabase.getCustomerById(id);
             const customerRow = customer.rows[0];
 
+            //create list of addresses for customer Obj creation
+            const addresses = [
+                {
+                    "name": customerRow.default_cust_name, 
+                    "place": customerRow.default_place,
+                    "postcode": customerRow.default_postcode,
+                    "street": customerRow.default_street,
+                    "streetNr": customerRow.default_streetnr,
+                    "company": customerRow.default_company
+                }, 
+                {
+                    "name": customerRow.shipping_cust_name, 
+                    "place": customerRow.shipping_place,
+                    "postcode": customerRow.shipping_postcode,
+                    "street": customerRow.shipping_street,
+                    "streetNr": customerRow.shipping_streetnr,
+                    "company": customerRow.shipping_company
+                },
+                {
+                    "name": customerRow.billing_cust_name, 
+                    "place": customerRow.billing_place,
+                    "postcode": customerRow.billing_postcode,
+                    "street": customerRow.billing_street,
+                    "streetNr": customerRow.billing_streetnr,
+                    "company": customerRow.billing_company
+                }
+            ]
+
             //create new Custoemr Object with information from database 
-            const customerReturnObject = new Customer(customerRow.cust_nr, customerRow.cust_name, customerRow.street, 
-                                                        customerRow.place, customerRow.postcode, customerRow.streetnr, 
-                                                            customerRow.personal_obj, customerRow.email); 
+            const customerReturnObject = new Customer(customerRow.cust_nr,customerRow.cust_email, customerRow.contact_email, customerRow.personal_obj, addresses); 
 
             console.log("CustomerService return for getCustomerWithID(id = " + id + "): " + customerReturnObject);
             return customerReturnObject;
@@ -64,10 +90,38 @@ class CustomerService {
             //create customer object for each entry and push it to list
             for (let i = 0; i < allCustomers.rows.length; i++) {
                 var customerRow = allCustomers.rows[i];
-                var customerObj = new Customer(customerRow.cust_nr,customerRow.cust_name, customerRow.street, 
-                                                customerRow.place, customerRow.postcode, customerRow.streetnr, 
-                                                    customerRow.personal_obj, customerRow.email);
-                                                    returnCustomerList.push(customerObj);
+
+                //create list of addresses for customer Obj creation
+                const addresses = [
+                    {
+                        "name": customerRow.default_cust_name, 
+                        "place": customerRow.default_place,
+                        "postcode": customerRow.default_postcode,
+                        "street": customerRow.default_street,
+                        "streetNr": customerRow.default_streetnr,
+                        "company": customerRow.default_company
+                    }, 
+                    {
+                        "name": customerRow.shipping_cust_name, 
+                        "place": customerRow.shipping_place,
+                        "postcode": customerRow.shipping_postcode,
+                        "street": customerRow.shipping_street,
+                        "streetNr": customerRow.shipping_streetnr,
+                        "company": customerRow.shipping_company
+                    },
+                    {
+                        "name": customerRow.billing_cust_name, 
+                        "place": customerRow.billing_place,
+                        "postcode": customerRow.billing_postcode,
+                        "street": customerRow.billing_street,
+                        "streetNr": customerRow.billing_streetnr,
+                        "company": customerRow.billing_company
+                    }
+                ]
+
+                const customerObj = new Customer(customerRow.cust_nr,customerRow.cust_email, customerRow.contact_email, customerRow.personal_obj, addresses); 
+
+                returnCustomerList.push(customerObj);
             }
             return returnCustomerList;
         } catch (ex) {

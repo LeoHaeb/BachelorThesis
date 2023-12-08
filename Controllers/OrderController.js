@@ -29,6 +29,30 @@ class OrderController{
     }
 
 
+    //method to get several orders
+    async getSomeOrders(amount) {
+        //create OrderService Object
+        const orderService = new OrderService()
+
+        //invoke method from Use Case Layer to work with order object, dependency injection with product_ordering database
+        const orderObjList = await orderService.getSomeOrders(amount, this.orderDatabase);
+
+        //get customer Objects for each order
+        const customerController = new CustomerController(this.customerDatabase);
+        for (let i = 0; i < orderObjList.length; i++) {
+            //get Customer with customer_id from order Object
+            const customer = await customerController.getCustomerWithID(orderObjList[i].customer);
+            //set customer attribute from order object
+            orderObjList[i].setCustomerObj(customer);
+        }
+
+        console.log("Ordercontroller return for getSomeOrders: " + orderObjList);
+        //return Material object
+        return orderObjList;
+    }
+
+
+
     //method to add new order to db 
     async createNewProductOrders(singleOrder) {
 
@@ -63,9 +87,10 @@ class OrderController{
         const listOrderItems = singleOrder.line_items;
         const shopifyOrderID = singleOrder.id;
         const boolPersonalization = true;
+        const orderdate = singleOrder.updated_at;
 
         //invoke method to add new order
-        const listNewOrders = await orderService.createNewProductOrders(customer, listOrderItems, shopifyOrderID, boolPersonalization, this.orderDatabase);
+        const listNewOrders = await orderService.createNewProductOrders(customer, listOrderItems, shopifyOrderID, boolPersonalization, orderdate, this.orderDatabase);
 
         console.log("OrderController returns for createNewOrder: " + listNewOrders);
         

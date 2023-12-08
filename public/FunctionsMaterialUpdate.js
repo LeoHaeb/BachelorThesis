@@ -5,6 +5,7 @@ async function init() {
     res = await fetch("http://localhost:8080/Material/getAllMaterial").then(allData => allData.json())
     let allData = res.rows;
              
+    //create table out of data (source: https://www.tutorialspoint.com/how-to-convert-json-data-to-a-html-table-using-javascript-jquery)
          // Get the container element where the table will be inserted
          let container = document.getElementById("container");
          
