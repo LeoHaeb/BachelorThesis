@@ -51,6 +51,36 @@ scannerRouter.get('/getSomeOrders/', async function(req, res) {
     }
 })
 
+
+//method to scan qrCode and get all data from database to code
+scannerRouter.get('/scanCode/', async function(req, res) {
+    //run python script 
+    const { spawn } = require('child_process');
+    
+    console.log("current directory: " + __dirname);
+
+    const ls = spawn('python', ["./Python/qrCodeScanner.py"]);
+
+    ls.stdout.on('data', (data) => {
+        console.log(`stdout: ${data}`);
+    });
+
+/*     const pythonProcess = spawn('python', ["./testScript.py"]);
+
+    var dataToSend;
+    pythonProcess.stdout.on('data', function (data) {
+      dataToSend += data.toString();
+      console.log("data: " + data);
+    });
+
+
+    pythonProcess.on('close', (code) => {
+        console.log("python process exited with code" + code);
+    }) */
+    console.log("Ende");
+})
+
+
 //Method to show html interface for scanning
 scannerRouter.get('/', async function(req, res) {
     console.log(__dirname + "\..\public");

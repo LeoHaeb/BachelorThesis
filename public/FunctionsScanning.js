@@ -68,3 +68,13 @@ async function init() {
     });
     container.appendChild(table) // Append the table to the container element
 }
+
+
+async function scanButtonFunction() {
+    //get id from qr-code
+    //var urlCode = await fetch("http://localhost:8080/scanner/scanCode").then((urlCode) => urlCode.json())
+
+    //start python script
+    subprocess.run("python", "../Python/qrCodeScanner.py")
+    console.log(urlCode);
+}

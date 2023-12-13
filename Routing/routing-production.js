@@ -67,12 +67,12 @@ productionRouter.post('/addNewProductsToProduction/', async function(req, res) {
                 var infoManufacturer = infoProductObj.material.manufacturer;
 
                 //create string for qr-code
-                var qrCodeString = "www.BspServer.de?productID=" + infoProductID + "&matRecCycles=" + infoMaterialRecCycles + "&synthMatType=" + infoSynthMatType + "&manufacturer=" + infoManufacturer;
+                var qrCodeString = "www.BspServer.de?productID=" + infoProductID;
 
                 //Kunde->Kaufdatum, Garantie, Rücksendeeticket
 
                 //create QR-Code
-                QRCode.toFile("./QRCodes/" + nameQrCode + ".png", qrCodeString, {type: 'png', width: 100, mode: "alphanumeric", deflateLevel: 20, errorCorrectionLevel: 'L'});
+                QRCode.toFile("./QRCodes/" + nameQrCode + ".png", qrCodeString, {type: 'png', width: 90, mode: "alphanumeric", deflateLevel: 20, errorCorrectionLevel: 'L'});
 
 /*                 //for testing: create html document
                 var newHTMLdoc = createHTML({
