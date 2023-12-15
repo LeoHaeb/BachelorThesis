@@ -118,7 +118,7 @@ class CustomerService {
                         "company": customerRow.billing_company
                     }
                 ]
-
+                //create new customer Object
                 const customerObj = new Customer(customerRow.cust_nr,customerRow.cust_email, customerRow.contact_email, customerRow.personal_obj, addresses); 
 
                 returnCustomerList.push(customerObj);

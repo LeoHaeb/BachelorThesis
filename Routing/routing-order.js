@@ -1,16 +1,14 @@
 const express = require('express');
 const OrderController = require('../Controllers/OrderController');
-const OrderSpecController = require('../Controllers/OrderSpecController');
 
 const DBConnection = require('../DataBaseConnection');
 const OrderDatabase = require('../DB/Order-database');
 const CustomerDatabase = require('../DB/Customer-database');
-const orderSpecDatabase = require('../DB/OrderSpec-database');
 
 var orderRouter = express.Router();
 
 
-//POST-request for adding new order to order db and orderspec db
+//POST-request for adding new order to order db and product_ordering db
 orderRouter.post('/addNewOrder', async function(req, res) {
     
     try {
