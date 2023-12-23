@@ -10,7 +10,7 @@ class CustomerCOntroller{
     //method to get custoemr with id as cust_nr 
     async getCustomerWithID(id) {
         //create Custoemr Service Object
-        const customerService = new CustomerService(this.customerDatabase);  
+        const customerService = new CustomerService();  
 
         //invoke method from Use Case Layer to work with Customer object, dependency injection with customer database
         const customer = await customerService.getCustomerWithID(id, this.customerDatabase);

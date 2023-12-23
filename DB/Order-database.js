@@ -1,9 +1,11 @@
 class OrderDatabase {
+
     constructor(db) {
         this.pool = db.pool;
     }
 
-    //method to get several orders from database
+
+    //method to get several orders from database 
     async getProductionOrderEntities(amount) {
         const client = await this.pool.connect();
         const query = {
@@ -13,6 +15,54 @@ class OrderDatabase {
         const res = await client.query(query);
         client.release();
         console.log("Order-database return for getProductionOrderEntities(" + amount + ") : " + JSON.stringify(res.rows));
+        return res;
+    }
+
+
+    //method to get orders from database for certain shopify_order_id 
+    async getOpenProductionOrderEntitiesFromShopifyID(shopify_order_id) {
+        const client = await this.pool.connect();
+        const query = {
+            text: 'select * from db_product_ordering where shopify_order_id = $1 and amount != processed order by amount ASC;',
+            values: [shopify_order_id]
+        }
+        const res = await client.query(query);
+        client.release();
+        console.log("Order-database return for getOpenProductionOrderEntitiesFromShopifyID(" + shopify_order_id + ") : " + JSON.stringify(res.rows));
+        return res;
+    }
+
+
+    //Method to get first open product ordering from db
+    async getFirstOpenOrderEntityWithShopifyID(shopify_order_id) {
+        const client = await this.pool.connect();
+        const query = {
+            text: 'select * from db_product_ordering where shopify_order_id = $1 and amount != processed limit 1;',
+            values: [shopify_order_id]
+        }
+        const res = await client.query(query);
+        client.release();
+        console.log("Order-database return for getFirstOpenOrderEntityWithShopifyID(" + shopify_order_id + ") : " + JSON.stringify(res.rows));
+        return res;
+    }
+
+
+    //method to get next open product ordering to process from db fro scanning surface
+    async getNextOpenOrderEntities(index) {
+        const client = await this.pool.connect();
+
+        var query = {
+/*             text: 'with openOrders as (select * from db_product_ordering where amount != processed order by orderdate asc), \
+            firstRowOpenOrders as (select * from openOrders limit 1) \
+            select * from openOrders where shopify_order_id in (select shopify_order_id from firstRowOpenOrders);', */
+            text: 'with openOrders as (select * from db_product_ordering where amount != processed),\
+            orderSelection as (select shopify_order_id, orderdate from openOrders group by shopify_order_id, orderdate) \
+            select * from orderSelection;',
+        }
+
+        const res = await client.query(query);
+        client.release();
+        console.log("Order-database return for getNextOpenOrders" + JSON.stringify(res.rows));
         return res;
     }
 
@@ -31,7 +81,7 @@ class OrderDatabase {
     }
 
     
-
+    //add list of orders to db
     async addAllOrderEntities(listProductOrders) {
         
         //list for returning IDs from db 
@@ -59,6 +109,20 @@ class OrderDatabase {
         client.release();
         console.log("Order-database return for createNewOrderSpec : " + listResultIDs);
         return listResultIDs;
+    }
+
+
+    //method to update processed column when product is scanned
+    async updateOrderEntityProcessed(orderObject) {
+        const client = await this.pool.connect();
+        const query = {
+            text: 'update db_product_ordering set processed = processed + 1 where product_order_id = $1 returning product_order_id',
+            values: [orderObject.productOrderID],
+        }
+        const updatedOrder = await client.query(query);
+        client.release();  
+        console.log("Order-database return for updateOrderEntityProcessed : " + updatedOrder);
+        return updatedOrder;
     }
 }
 

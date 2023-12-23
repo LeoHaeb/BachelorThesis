@@ -45,6 +45,23 @@ class ProductionDatabase {
         return productData;
     }
 
+    
+    //Method to update inspection column in db production
+    async bringTogetherProductAndOrderEntity(productObject, orderObject) {
+
+        //update db_production
+        const query = {
+            text: 'update db_production set order_id = $1, personal = $2, orderdate = $3 where id_product = $4 returning id_product',
+            values: [orderObject.productOrderID, orderObject.boolPersonalization, orderObject.orderDate, productObject.productID],
+        }
+        const client = await this.pool.connect();
+        const data_dbProduction = await client.query(query);
+        client.release();
+
+        console.log("production-database return for getProductEntityByID : " + JSON.stringify(data_dbProduction.rows));
+        return data_dbProduction;
+    }
+
 
     //method to update db with failed production steps
     async updateProductEntitiesFails(updates) {

@@ -1,3 +1,4 @@
+const OrderDatabase = require('../DB/Order-database');
 const Product = require('../Entities/Product');
 
 class ProductionService {
@@ -92,6 +93,24 @@ class ProductionService {
 
             console.log("ProductionService return list of indizes for updateProductionInspections: " + inspectedProductIDs);
             return inspectedProductIDs;
+        } catch(error) {
+            console.log("error: " + error);
+        }
+    }
+
+
+    //Method to add order information to product object
+    async bringTogetherProductAndOrder(productObject, orderObject, productionDatabase, orderDatabase) {
+        try {
+            //update production db with information from product Object and order Object
+            const updatedProduct = await productionDatabase.bringTogetherProductAndOrderEntity(productObject, orderObject);
+
+            const updatedOrder = await orderDatabase.updateOrderEntityProcessed(orderObject);
+
+            //add Information from ordere Object to product Object
+            productObject.mergeWithOrder(orderObject);
+
+            console.log("ProductionService return product Object: " + productObject);
         } catch(error) {
             console.log("error: " + error);
         }

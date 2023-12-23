@@ -90,12 +90,32 @@ productionRouter.post('/addNewProductsToProduction/', async function(req, res) {
     }
 })
 
+//get request to get product to id
+productionRouter.get('/getProductByID/', async function(req, res) {
+    try {
+        //get ID to search for from request
+        const productID = parseInt(req.query["productID"]);
 
-//post-request to update database with failed production cases
-productionRouter.post('/updateFailedProducts/', async function(req, res) {
-    const info = req.body;
+        //create database connectionObject
+        const dbConnection = new DBConnection();
 
+        //create Database Objects with Connection to PostgreSQL
+        const productionDatabase = new ProductionDatabase(dbConnection);
+        const materialDatabase = new MaterialDatabase(dbConnection);
+        const orderDatabase = new OrderDatabase(dbConnection);
+        const customerDatabase = new CustomerDatabase(dbConnection);
+
+        //create controller objects
+        const productionController = new ProductionController(productionDatabase, materialDatabase, orderDatabase, customerDatabase);
+        
+        const productObj = await productionController.getProductWithID(productID)
+        res.set('Access-Control-Allow-Origin', 'http://localhost:3000');
+        res.send(productObj);
+    } catch(error){
+        console.log("error: " + error);
+    }
 })
+
 
 
 productionRouter.get('/', async function(req, res) {

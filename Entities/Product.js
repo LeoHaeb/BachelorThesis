@@ -24,6 +24,12 @@ class Product {
     setOrderObj(orderObject) {
         this.order = orderObject;
     }
+
+    async mergeWithOrder(orderObject) {
+        this.order = orderObject;
+        this.boolPersonalization = orderObject.boolPersonalization;
+        this.orderdate = orderObject.orderdate;
+    } 
 }
 
 module.exports = Product;

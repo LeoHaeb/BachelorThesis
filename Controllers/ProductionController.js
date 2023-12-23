@@ -125,6 +125,59 @@ class ProductionController {
         console.log("ProductionController return indexlist for updateProductionInspection: " + updatedProductionIDs);
         return updatedProductionIDs;
     }
+
+
+    //Method to bring together Product information <-> Order information
+    async bringTogetherPrductAndOrder(id_product, shopify_order_id) {
+
+        //get product object
+        const productionController = new ProductionController(this.productionDatabase);
+        const productObject = await productionController.getProductWithID(id_product);
+        
+        //get first open order Object from db
+        const orderController = new OrderController(this.orderDatabase, this.customerDatabase);
+        const orderObjectList = await orderController.getOpenOrdersFromShopifyOrderID(shopify_order_id);
+
+        var orderObject = null;
+        //get order Object from openOrderList that matches with scanned product (name)
+
+        findRghtOrderLoop: for(let i = 0; i < orderObjectList.length; i++) {
+
+            var orderProductName = orderObjectList[i].productSpec;
+            
+            switch (productObject.productName) {
+                case "GB_L":
+                    if (orderProductName.includes("Geldbeutel") && orderProductName.includes("Klein")) {
+                        orderObject = orderObjectList[i];
+                        break findRghtOrderLoop;
+                    }
+                case "GB_XL":
+                    if (orderProductName.includes("Geldbeutel") && orderProductName.includes("Mittel")) {
+                        orderObject = orderObjectList[i];
+                        break findRghtOrderLoop;
+                    }
+                case "GB_XXL":
+                    if (orderProductName.includes("Geldbeutel") && orderProductName.includes("Groß")) {
+                        orderObject = orderObjectList[i];
+                        break findRghtOrderLoop;
+                    }
+                case "suitcase":
+                    if (orderProductName.includes("Tasche")) {
+                        orderObject = orderObjectList[i];
+                        break findRghtOrderLoop;
+                    }                                       
+                default:
+                    break;
+            }
+        };
+
+        //merge order-Object and product Object
+        const productionService = new ProductionService();
+        await productionService.bringTogetherProductAndOrder(productObject, orderObject,this.productionDatabase, this.orderDatabase);
+
+        console.log("ProductionController return Object for bringTogetherProductAndOrder: " + productObject);
+        return productObject;
+    }
 }
 
 module.exports = ProductionController;

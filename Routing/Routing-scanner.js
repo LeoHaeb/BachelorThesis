@@ -16,12 +16,11 @@ const path = require('path');
 //create routing-object from express middleware 
 var scannerRouter = express.Router();
 
-//POST-request when product is scanned
-//response is ???
-scannerRouter.get('/getSomeOrders/', async function(req, res) {
+//GET request to get next open orders
+scannerRouter.get('/getNextOpenOrders/', async function(req, res) {
 
     //get amount of orders to send
-    const amount = parseInt(req.query["amount"]);
+    const index = parseInt(req.query["index"]);
 
     //create database connectionObject
     const dbConnection = new DBConnection();
@@ -41,10 +40,12 @@ scannerRouter.get('/getSomeOrders/', async function(req, res) {
     console.log("http-request to start process of information assembly customer <-> production\n");
 
     //get list of first lines (amount) of order Objects from db
-    const listOrderObj = await orderController.getSomeOrders(amount);
+    const listOrderObj = await orderController.getNextOpenOrders(index);
 
     try {
-        console.log("die ersten " + amount + "orders: " + listOrderObj);
+        console.log("next orders: " + listOrderObj);
+        //allow cross origin ressource sharing CORS for testing with local frontend
+        res.set('Access-Control-Allow-Origin', 'http://localhost:3000');
         res.send(listOrderObj);
     } catch(error) {
         res.status(404).json({error: error.message})
@@ -52,33 +53,75 @@ scannerRouter.get('/getSomeOrders/', async function(req, res) {
 })
 
 
-//method to scan qrCode and get all data from database to code
-scannerRouter.get('/scanCode/', async function(req, res) {
-    //run python script 
-    const { spawn } = require('child_process');
-    
-    console.log("current directory: " + __dirname);
+//GET Request to get all information to certain order_id
+scannerRouter.get('/getOpenOrdersFromShopifyOrderID/', async function(req, res) {
 
-    const ls = spawn('python', ["./Python/qrCodeScanner.py"]);
+    //get shopify order ID 
+    const shopify_order_id = parseInt(req.query["shopify_order_id"]);
 
-    ls.stdout.on('data', (data) => {
-        console.log(`stdout: ${data}`);
-    });
+    //create database connectionObject
+    const dbConnection = new DBConnection();
 
-/*     const pythonProcess = spawn('python', ["./testScript.py"]);
+    //create Database Objects with Connection to PostgreSQL
+    const productionDatabase = new ProductionDatabase(dbConnection);
+    const materialDatabase = new MaterialDatabase(dbConnection);
+    const orderDatabase = new OrderDatabase(dbConnection);
+    const customerDatabase = new CustomerDatabase(dbConnection);
 
-    var dataToSend;
-    pythonProcess.stdout.on('data', function (data) {
-      dataToSend += data.toString();
-      console.log("data: " + data);
-    });
+    //create controller objects
+    const productionController = new ProductionController(productionDatabase, materialDatabase, orderDatabase, customerDatabase);
+    const materialController = new MaterialController(materialDatabase);
+    const orderController = new OrderController(orderDatabase, customerDatabase);
+    const customerController = new CustomerCOntroller(customerDatabase);
 
+    //get list of information to order with shopify_order_id from db
+    const listOrderObj = await orderController.getOpenOrdersFromShopifyOrderID(shopify_order_id);
 
-    pythonProcess.on('close', (code) => {
-        console.log("python process exited with code" + code);
-    }) */
-    console.log("Ende");
+    try {
+        console.log("next orders: " + listOrderObj);
+        //allow cross origin ressource sharing CORS for testing with local frontend
+        res.set('Access-Control-Allow-Origin', 'http://localhost:3000');
+        res.send(listOrderObj);
+    } catch(error) {
+        res.status(404).json({error: error.message})
+    }
 })
+
+
+//GET request for bringing together db_production and db_order
+scannerRouter.get('/assignOrderToProduct/', async function(req, res) {
+
+    //get ID of scanned product and ID of selected order
+    const id_product = parseInt(req.query["productID"]);
+    const shopify_order_id = parseInt(req.query["order_id"]);
+
+    //create database connectionObject
+    const dbConnection = new DBConnection();
+
+    //create Database Objects with Connection to PostgreSQL
+    const productionDatabase = new ProductionDatabase(dbConnection);
+    const materialDatabase = new MaterialDatabase(dbConnection);
+    const orderDatabase = new OrderDatabase(dbConnection);
+    const customerDatabase = new CustomerDatabase(dbConnection);
+
+    //create controller objects
+    const productionController = new ProductionController(productionDatabase, materialDatabase, orderDatabase, customerDatabase);
+    const materialController = new MaterialController(materialDatabase);
+    const orderController = new OrderController(orderDatabase, customerDatabase);
+    const customerController = new CustomerCOntroller(customerDatabase);
+
+    //invoke method from production Controller
+    const productReturnObject = await productionController.bringTogetherPrductAndOrder(id_product, shopify_order_id);
+
+    try {
+        console.log("product Object after merge with order Object: " + productReturnObject);
+        //allow cross origin ressource sharing CORS for testing with local frontend
+        res.set('Access-Control-Allow-Origin', 'http://localhost:3000');
+        res.send(listOrderObj);
+    } catch(error) {
+        res.status(404).json({error: error.message})
+    }
+}) 
 
 
 //Method to show html interface for scanning
