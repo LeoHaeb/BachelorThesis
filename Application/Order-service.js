@@ -23,8 +23,23 @@ class OrderService{
             //return order object
             return orderReturnObj;
         }
-        catch(ex) {
+        catch(error) {
             console.log("Problem in class Order-service in method getOrderwithID(" + id + ")");
+            console.log("error: " + error)
+        }
+    }
+
+
+    //method to get order from database for specific product_order_id = id
+    async updateOrderProcessed(orderObj, value, orderDatabase) {
+        try {
+            //update order db
+            const orderID = await orderDatabase.updateOrderEntityProcessed(orderObj, value);
+            orderObj.updateValueProcessed(value);
+        }
+        catch(error) {
+            console.log("Problem in class Order-service in method updateOrderProcessed");
+            console.log("error: " + error)
         }
     }
 
@@ -116,7 +131,7 @@ class OrderService{
             for (let i = 0; i < orderList.rows.length; i++) {
                 const orderRow = orderList.rows[i];
                 //create order Object with information from database
-                const orderObj = new Order(orderRow.product_order_id, orderRow.customer_id, orderRow.shopify_order_id, orderRow.prod_spec, orderRow.personaliz, orderRow.amount, orderRow.orderdate, orderRow.processed);
+                const orderObj = new Order(orderRow.product_order_id, orderRow.customer_id, orderRow.shopify_order_id, orderRow.prod_spec, orderRow.personaliz, parseInt(orderRow.amount), orderRow.orderdate, parseInt(orderRow.processed));
                 orderObjReturnList.push(orderObj)
             }
 

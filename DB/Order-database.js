@@ -4,6 +4,19 @@ class OrderDatabase {
         this.pool = db.pool;
     }
 
+    //method to get order with ID
+    async getProductionOrderEntitywithID(order_ID) {
+        const client = await this.pool.connect();
+        const query = {
+            text: 'select * from db_product_ordering where product_order_id = $1;',
+            values: [order_ID]
+        }
+        const order = await client.query(query);
+        client.release();
+        console.log("Order-database return for getProductionOrderEntitywithID(" + order_ID + ") : " + JSON.stringify(order.rows));
+        return order;
+    }
+
 
     //method to get several orders from database 
     async getProductionOrderEntities(amount) {
@@ -113,11 +126,11 @@ class OrderDatabase {
 
 
     //method to update processed column when product is scanned
-    async updateOrderEntityProcessed(orderObject) {
+    async updateOrderEntityProcessed(orderObject, value) {
         const client = await this.pool.connect();
         const query = {
-            text: 'update db_product_ordering set processed = processed + 1 where product_order_id = $1 returning product_order_id',
-            values: [orderObject.productOrderID],
+            text: 'update db_product_ordering set processed = processed + $2 where product_order_id = $1 returning product_order_id',
+            values: [orderObject.productOrderID, value],
         }
         const updatedOrder = await client.query(query);
         client.release();  

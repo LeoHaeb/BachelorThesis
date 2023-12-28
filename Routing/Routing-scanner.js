@@ -16,6 +16,14 @@ const path = require('path');
 //create routing-object from express middleware 
 var scannerRouter = express.Router();
 
+//CORS
+scannerRouter.use(function(req, res, next) {
+    //res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Origin", "http://localhost:3000");
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    next();
+  });
+
 //GET request to get next open orders
 scannerRouter.get('/getNextOpenOrders/', async function(req, res) {
 
@@ -89,11 +97,10 @@ scannerRouter.get('/getOpenOrdersFromShopifyOrderID/', async function(req, res) 
 
 
 //GET request for bringing together db_production and db_order
-scannerRouter.get('/assignOrderToProduct/', async function(req, res) {
+scannerRouter.post('/assignOrderToProduct/', async function(req, res) {
 
-    //get ID of scanned product and ID of selected order
-    const id_product = parseInt(req.query["productID"]);
-    const shopify_order_id = parseInt(req.query["order_id"]);
+    //get inforamtion from POST Request
+    const assembleInfos = req.body;
 
     //create database connectionObject
     const dbConnection = new DBConnection();
@@ -106,23 +113,74 @@ scannerRouter.get('/assignOrderToProduct/', async function(req, res) {
 
     //create controller objects
     const productionController = new ProductionController(productionDatabase, materialDatabase, orderDatabase, customerDatabase);
-    const materialController = new MaterialController(materialDatabase);
-    const orderController = new OrderController(orderDatabase, customerDatabase);
-    const customerController = new CustomerCOntroller(customerDatabase);
-
-    //invoke method from production Controller
-    const productReturnObject = await productionController.bringTogetherPrductAndOrder(id_product, shopify_order_id);
 
     try {
+        //invoke method from production Controller
+        const productReturnObject = await productionController.bringTogetherPrductAndOrder(assembleInfos);
+
         console.log("product Object after merge with order Object: " + productReturnObject);
         //allow cross origin ressource sharing CORS for testing with local frontend
         res.set('Access-Control-Allow-Origin', 'http://localhost:3000');
-        res.send(listOrderObj);
+        res.send(productReturnObject);
     } catch(error) {
+        res.set('Access-Control-Allow-Origin', 'http://localhost:3000');
+        //res.send(error);
         res.status(404).json({error: error.message})
     }
 }) 
 
+
+//post-request to update database with newest shipping Status 
+scannerRouter.post('/shippingStatus/', async function(req, res) {
+    try {
+        //create database connectionObject
+        const dbConnection = new DBConnection();
+
+        //create Database Objects with Connection to PostgreSQL
+        const productionDatabase = new ProductionDatabase(dbConnection);
+        const materialDatabase = new MaterialDatabase(dbConnection);
+        const orderDatabase = new OrderDatabase(dbConnection);
+        const customerDatabase = new CustomerDatabase(dbConnection);
+
+        //create controller objects
+        const productionController = new ProductionController(productionDatabase, materialDatabase, orderDatabase, customerDatabase);
+
+        console.log("http-request to update production table with shipping status of product\n");
+
+        const updatedProductObj = await productionController.updateShippingStatus(req);
+        res.send(updatedProductObj);
+    } catch(error) {
+        console.log("error: " + error);
+        res.status(404).json({error: error.message})
+    }
+})
+
+
+//get-request to get all open shippings for products with certain shopify_order_ID 
+scannerRouter.get('/getAllOpenShippingForOrder/', async function(req, res) {
+    try {
+        //get shopify order ID to look for open shippings
+        const shopify_order_id = parseInt(req.query["shopify_order_id"]);
+
+        //create database connectionObject
+        const dbConnection = new DBConnection();
+
+        //create Database Objects with Connection to PostgreSQL
+        const productionDatabase = new ProductionDatabase(dbConnection);
+        const materialDatabase = new MaterialDatabase(dbConnection);
+        const orderDatabase = new OrderDatabase(dbConnection);
+        const customerDatabase = new CustomerDatabase(dbConnection);
+
+        //create controller objects
+        const productionController = new ProductionController(productionDatabase, materialDatabase, orderDatabase, customerDatabase);
+
+        const listProductObj = await productionController.getOpenShippingProducts(shopify_order_id);
+        res.send(listProductObj);
+    } catch(error) {
+        console.log("error: " + error);
+        res.status(404).json({error: error.message})
+    }
+})
 
 //Method to show html interface for scanning
 scannerRouter.get('/', async function(req, res) {

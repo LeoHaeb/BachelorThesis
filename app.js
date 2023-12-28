@@ -43,4 +43,3 @@ app.use('/productionFails/', express.static(path.join(__dirname, "public")));
 
 //Routing for requests to productionFails
 app.use('/scanner/', scannerRouter);
-//app.use('/scanner/', express.static(path.join(__dirname, "public")));

@@ -22,6 +22,10 @@ class Order{
     setCustomerObj(customerObject) {
         this.customer = customerObject;
     }
+
+    updateValueProcessed(value) {
+        this.processed += value;
+    }
 }
 
 module.exports = Order;

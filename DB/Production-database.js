@@ -4,6 +4,36 @@ class ProductionDatabase {
         this.pool = db.pool;
     }
 
+    //method to get product by id from db
+    async getProductEntityByID(id) {
+        const query = {
+            text: 'select * from db_production where id_product = $1',
+            values: [id],
+        }
+        const client = await this.pool.connect();
+        const productData = await client.query(query);
+        client.release();
+
+        console.log("production-database return for getProductEntityByID : " + JSON.stringify(productData.rows));
+        return productData;
+    }
+
+
+    //method to get product by ids for order
+    async getProductEntitiesFromORder(shopify_order_id) {
+        const query = {
+            text: 'with listProductsFromShopifyOrder as (select product_order_id from db_product_ordering where shopify_order_id = $1) \
+            select id_product from db_production where order_id in (select * from listProductsFromShopifyOrder);',
+            values: [shopify_order_id],
+        }
+        const client = await this.pool.connect();
+        const productData = await client.query(query);
+        client.release();
+
+        console.log("production-database return for getProductEntitiesFromORder : " + JSON.stringify(productData.rows));
+        return productData.rows;
+    }
+
 
     //method to add new product entries to db
     async addNewProductEntity(newProduct, amount) {
@@ -30,28 +60,13 @@ class ProductionDatabase {
         return listProductID;
     }
 
-
-    //method to get product by id from db
-    async getProductEntityByID(id) {
-        const query = {
-            text: 'select * from db_production where id_product = $1',
-            values: [id],
-        }
-        const client = await this.pool.connect();
-        const productData = await client.query(query);
-        client.release();
-
-        console.log("production-database return for getProductEntityByID : " + JSON.stringify(productData.rows));
-        return productData;
-    }
-
     
     //Method to update inspection column in db production
     async bringTogetherProductAndOrderEntity(productObject, orderObject) {
 
         //update db_production
         const query = {
-            text: 'update db_production set order_id = $1, personal = $2, orderdate = $3 where id_product = $4 returning id_product',
+            text: 'update db_production set order_id = $1, personal = $2, orderdate = $3 , visuinsp_prod = true where id_product = $4 returning id_product',
             values: [orderObject.productOrderID, orderObject.boolPersonalization, orderObject.orderDate, productObject.productID],
         }
         const client = await this.pool.connect();
@@ -162,6 +177,68 @@ class ProductionDatabase {
         }
         return inspectedProducts;
     } 
+
+
+    //Method to update Personalization Inspection
+    async updateProductEntitiesPersonalization(objVisualInspectionInfos) {
+
+        //get parameters
+        const productID = objVisualInspectionInfos.productID;
+        const resultVisualInspection = objVisualInspectionInfos.resultVisualInspection;
+
+        const query = {
+            text: 'update db_production set visuinsp_personal = $2 where id_product = $1 returning id_product',
+            values: [productID, resultVisualInspection],
+        }
+        const client = await this.pool.connect();
+        const productData = await client.query(query);
+        client.release();
+
+        console.log("production-database return for updateProductEntitiesPersonalization : " + JSON.stringify(productData.rows));
+        return productData;
+    }
+
+
+    //Method to update Inspection after Scanning
+    async updateProductEntitiesScanning(objVisualInspectionInfos) {
+
+        //get parameters
+        const productID = objVisualInspectionInfos.productID;
+        const resultVisualInspection = objVisualInspectionInfos.resultVisualInspection;
+
+        const query = {
+            text: 'update db_production set order_id = NULL, prodfail = 0, visuinsp_prod = $2, personal = NULL, visuinsp_personal = NULL, aftersales = NULL, orderdate = NULL, shipping = false where id_product = $1 returning id_product',
+            values: [productID, resultVisualInspection],
+        }
+        const client = await this.pool.connect();
+        const productData = await client.query(query);
+        client.release();
+
+        console.log("production-database return for updateProductEntitiesScanning : " + JSON.stringify(productData.rows));
+        return productData;
+    }
+
+
+    //Method to update shipping column
+    async updateProductEntitiesShipping(shippingInfo) {
+
+        //get parameters
+        const productID = shippingInfo.productID;
+        const shippingStatus = shippingInfo.shippingStatus;
+
+        const query = {
+            text: 'update db_production set shipping = $2 where id_product = $1 returning id_product',
+            values: [productID, shippingStatus],
+        }
+        const client = await this.pool.connect();
+        const productData = await client.query(query);
+        client.release();
+
+        console.log("production-database return for updateProductEntitiesShipping : " + JSON.stringify(productData.rows));
+        return productData;
+    }
 }
+
+
 
 module.exports = ProductionDatabase;
