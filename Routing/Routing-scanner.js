@@ -16,14 +16,6 @@ const path = require('path');
 //create routing-object from express middleware 
 var scannerRouter = express.Router();
 
-//CORS
-scannerRouter.use(function(req, res, next) {
-    //res.header("Access-Control-Allow-Origin", "*");
-    res.header("Access-Control-Allow-Origin", "http://localhost:3000");
-    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-    next();
-  });
-
 //GET request to get next open orders
 scannerRouter.get('/getNextOpenOrders/', async function(req, res) {
 

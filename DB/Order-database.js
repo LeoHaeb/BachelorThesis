@@ -60,7 +60,7 @@ class OrderDatabase {
     }
 
 
-    //method to get next open product ordering to process from db fro scanning surface
+    //method to get next open product ordering to process from db for scanning surface
     async getNextOpenOrderEntities(index) {
         const client = await this.pool.connect();
 

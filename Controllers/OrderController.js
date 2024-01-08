@@ -106,7 +106,6 @@ class OrderController{
 
 
         //get customer Object and customerNr from order
-        //const reqCustomer = singleOrder.customer;
         if (singleOrder.customer && singleOrder.customer.id) {
             const custNr = singleOrder.customer.id;
 
